@@ -2,6 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.swiftyproteins">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:glEsVersion="0x00030000"
+        android:required="true" />
+    <uses-feature android:name="android.hardware.camera.ar" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <application
         android:name=".presentation.App"
         android:allowBackup="true"
@@ -10,8 +20,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SwiftyProteins">
+
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="required" />
+
         <activity
-            android:name=".presentation.activity.MainActivity"
+            android:name=".presentation.activity.ActivityUx"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

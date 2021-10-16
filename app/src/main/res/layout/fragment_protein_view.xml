@@ -9,4 +9,5 @@
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/CustomToolbar.Close"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
