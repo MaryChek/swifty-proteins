@@ -1,128 +1,132 @@
 package com.example.swiftyproteins.presentation.activity
 
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.ActivityUxBinding
 import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
-import com.google.ar.sceneform.rendering.*
-import com.google.ar.sceneform.ux.ArFragment
+import com.google.ar.sceneform.rendering.Material
+import com.google.ar.sceneform.rendering.MaterialFactory
+import com.google.ar.sceneform.rendering.ModelRenderable
+import com.google.ar.sceneform.rendering.ShapeFactory
+import com.google.ar.sceneform.rendering.Color as RenderColor
 
 class ActivityUx : AppCompatActivity() {
 
-    private lateinit var binding: ActivityUxBinding
-    private lateinit var fragmentUx: ArFragment
-    lateinit var scene: Scene
+    private var binding: ActivityUxBinding? = null
+    private var scene: Scene? = null
+    private val logTag: String = this::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUxBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        init()
-//        fragmentUx = supportFragmentManager.findFragmentById(R.id.ux_fragment) as ArFragment
+        setContentView(binding?.root)
+        initScene()
+        initTouchListeners()
     }
 
-    private fun init() {
-        scene = binding.sceneView.scene
+    private fun initScene() {
+        binding?.sceneView?.background = ColorDrawable(getColor(R.color.color_background_scene))
+        scene = binding?.sceneView?.scene
         val sphereOnePos = Vector3(-1f, -1f, 0f)
         val sphereTwoPos = Vector3(1f, 1f, -2f)
-        scene.camera.worldPosition = Vector3(0f, 0f, 4f)
+        val sphereTreePos = Vector3(1f, -0.2f, 0f)
+        scene?.camera?.worldPosition = Vector3(0f, 0f, 4f)
         makeSphere(sphereOnePos, Color.WHITE)
         makeSphere(sphereTwoPos, Color.BLACK)
-        makeSphere(Vector3(0f, 0f, 0f), Color.BLACK)
-        cylinderBetweenPoints(sphereOnePos, sphereTwoPos)
-
+        makeSphere(sphereTreePos, Color.RED)
+        cylinderBetweenPoints(sphereOnePos, sphereTreePos)
+        cylinderBetweenPoints(sphereTreePos, sphereTwoPos)
     }
 
-    private fun initTouchListeners() {
-//        fragmentUx.setOnTapArPlaneListener { hitResult, plane, motionEvent ->
-//            val point: Anchor = hitResult.createAnchor()
-//
-//            createModel()
-//        }
-    }
+    private fun initTouchListeners() =
+        scene?.addOnPeekTouchListener { hitResult, _ ->
+            hitResult?.node?.name?.let { nameNode ->
+                Log.d(logTag, "click on $nameNode")
+            }
+        }
 
-    private fun cylinderBetweenPoints(point1: Vector3?, point2: Vector3?) {
-        val lineNode = Node()
-
-        val difference = Vector3.subtract(point1, point2)
-        val directionFromTopToBottom = difference.normalized()
-        val rotationFromAToB = Quaternion.lookRotation(directionFromTopToBottom, Vector3.up())
-
-        MaterialFactory.makeOpaqueWithColor(this, Color(Color.parseColor("#ffa71c")))
+    private fun cylinderBetweenPoints(point1: Vector3, point2: Vector3) =
+        MaterialFactory.makeOpaqueWithColor(this, RenderColor(getColor(R.color.atom_connection)))
             .thenAccept { material ->
-                val lineRenderable = ShapeFactory.makeCylinder(
-                    0.05f, difference.length(),
-                    Vector3.zero(), material
-                )
-                lineNode.setParent(scene)
-                lineNode.renderable = lineRenderable
-                lineNode.localPosition = Vector3.add(point1, point2).scaled(.5f)
-                lineNode.worldRotation = Quaternion.multiply(
-                        rotationFromAToB,
-                        Quaternion.axisAngle(Vector3(1.0f, 0.0f, 0.0f), 90f)
-                    )
+                val differencePoints: Vector3 = Vector3.subtract(point1, point2)
+                val position: Vector3 = Vector3.add(point1, point2).scaled(HALF)
+                val model: ModelRenderable = makeCylinder(differencePoints.length(), material)
+                addCylinderToScene(model, position, getCylinderRotation(differencePoints))
             }
 
-    }
-    private fun makeSphere(pos: Vector3, res: Int) {
-        MaterialFactory.makeOpaqueWithColor(
-            this,
-            com.google.ar.sceneform.rendering.Color(res)
-        )
-            .thenAccept { material ->
-                addModelToScene(
-                    ShapeFactory.makeSphere(
-                        0.1f,
-                        Vector3.zero(),
-                        material
-                    ), pos
-                )
+    private fun makeCylinder(height: Float, material: Material): ModelRenderable =
+        ShapeFactory.makeCylinder(CYLINDER_RADIUS, height, Vector3.zero(), material)
 
-            }
+    private fun getCylinderRotation(differencePoints: Vector3): Quaternion {
+        val direction = differencePoints.normalized()
+        val lookRotation = Quaternion.lookRotation(direction, Vector3.up())
+        val quaterRotation = Quaternion.axisAngle(AXIS_X, AXIS_ROTATION_ANGLE)
+        return Quaternion.multiply(lookRotation, quaterRotation)
     }
 
-    private fun addCylinderModelToScene(
+    private fun addCylinderToScene(
         model: ModelRenderable,
-        center: Vector3,
-        posStart: Vector3,
-        posEnd: Vector3
+        position: Vector3,
+        rotation: Quaternion
     ) {
         val node = Node().apply {
             setParent(scene)
-            worldPosition = center
-//            localScale = Vector3(3f, 3f, 3f)
-            name = "Cupcake"
+            worldPosition = position
             renderable = model
-            localRotation = Quaternion.lookRotation(posStart, posEnd)
+            worldRotation = rotation
         }
-
-        scene.addChild(node)
-
+        scene?.addChild(node)
     }
 
-    private fun addModelToScene(model: ModelRenderable, pos: Vector3) {
+    private fun makeSphere(pos: Vector3, color: Int) =
+        MaterialFactory.makeOpaqueWithColor(this, RenderColor(color))
+            .thenAccept { material ->
+                addModelToScene(makeSphere(material), pos)
+            }
+
+    private fun makeSphere(material: Material): ModelRenderable =
+        ShapeFactory.makeSphere(SPHERE_RADIUS, Vector3.zero(), material)
+
+    private fun addModelToScene(model: ModelRenderable, position: Vector3/*name: String*/) {
         val node = Node().apply {
             setParent(scene)
-            worldPosition = pos
-            localScale = Vector3(3f, 3f, 3f)
+            worldPosition = position
+            localScale = SPHERE_SCALE
             name = "Cupcake"
             renderable = model
         }
-
-        scene.addChild(node)
+        scene?.addChild(node)
     }
 
     override fun onPause() {
         super.onPause()
-        binding.sceneView.pause()
+        binding?.sceneView?.pause()
     }
 
     override fun onResume() {
         super.onResume()
-        binding.sceneView.resume()
+        binding?.sceneView?.resume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding?.sceneView?.destroy()
+        binding = null
+    }
+
+    companion object {
+        private val AXIS_X = Vector3(1.0f, 0.0f, 0.0f)
+        private const val AXIS_ROTATION_ANGLE = 90f
+        private const val HALF = .5f
+        private const val SPHERE_RADIUS = .1F
+        private val SPHERE_SCALE = Vector3(3f, 3f, 3f)
+        private const val CYLINDER_RADIUS = .1F
     }
 }
