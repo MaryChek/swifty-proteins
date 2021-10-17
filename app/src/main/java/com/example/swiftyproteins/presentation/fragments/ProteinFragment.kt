@@ -1,5 +1,6 @@
 package com.example.swiftyproteins.presentation.fragments
 
+import android.app.DownloadManager
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,13 +9,22 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinViewBinding
-import com.example.swiftyproteins.presentation.Extension.getColor
-import com.example.swiftyproteins.presentation.Extension.logD
+import com.example.swiftyproteins.presentation.App
+import com.example.swiftyproteins.presentation.getColor
+import com.example.swiftyproteins.presentation.logD
 import com.example.swiftyproteins.presentation.fragments.base.BaseFragment
+import com.example.swiftyproteins.presentation.logE
 import com.example.swiftyproteins.presentation.navigation.FromProtein
 import com.example.swiftyproteins.presentation.scene.SceneRender
 import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.math.Vector3
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.lang.Exception
 
 class ProteinFragment : BaseFragment<FromProtein>() {
 
@@ -45,6 +55,7 @@ class ProteinFragment : BaseFragment<FromProtein>() {
         setNodesToScene()
     }
 
+    //TODO move to viewModel
     private fun onNodeTouch(node: Node) {
         node.name?.let { nameNode ->
             logD("click on $nameNode")
@@ -52,6 +63,8 @@ class ProteinFragment : BaseFragment<FromProtein>() {
     }
 
     private fun setNodesToScene() {
+        getProtein()
+
         val sphereOnePos = Vector3(1f, -2f, 0f)
         val sphereTwoPos = Vector3(1f, 1f, -2f)
         val sphereTreePos = Vector3(1f, -0.2f, 0f)
@@ -61,6 +74,30 @@ class ProteinFragment : BaseFragment<FromProtein>() {
         val cylinderColor: Int = getColor(R.color.atom_connection)
         sceneRender?.setCylinder(requireContext(), sphereOnePos, sphereTreePos, cylinderColor)
         sceneRender?.setCylinder(requireContext(), sphereTreePos, sphereTwoPos, cylinderColor)
+    }
+
+    //TODO move to ViewModel
+    private fun getProtein() {
+        //TODO get proteinName from file ligands.txt
+        val proteinName: String = "001"
+        getFile(proteinName)
+    }
+
+    private fun getFile(proteinName: String) {
+        val app: App = requireActivity().applicationContext as App
+        val repository = app.repository
+        repository.getAtomByName(proteinName) { body ->
+            val inStream: InputStream = body.byteStream()
+            val reader = BufferedReader(InputStreamReader(inStream))
+            var result: String?
+            var line: String? = reader.readLine()
+            result = line
+            while (reader.readLine().also { line = it } != null) {
+                result += line
+            }
+            println(result)
+            body.close()
+        }
     }
 
     override fun handleAction(action: FromProtein) {

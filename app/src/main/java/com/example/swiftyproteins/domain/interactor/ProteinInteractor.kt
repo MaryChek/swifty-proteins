@@ -1,9 +1,10 @@
 package com.example.swiftyproteins.domain.interactor
 
+import com.example.swiftyproteins.data.repository.ProteinsRepository
 import com.example.swiftyproteins.domain.models.Atom
 
-class ProteinInteractor {
+class ProteinInteractor(private val repository: ProteinsRepository) {
     fun getAtomByName(name: String): Atom {
-        return Atom("", "", Atom.Coordinate(0.0, 0.0, 0.0), false, listOf())
+        return
     }
 }
