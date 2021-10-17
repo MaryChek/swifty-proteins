@@ -6,6 +6,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.ActivityMainBinding
+import com.example.swiftyproteins.presentation.fragments.ProteinFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,17 +16,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        initNavigation()
-    }
 
-//    private fun initNavigation() {
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        setupActionBarWithNavController(navController)
-//    }
-//
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        return navController.navigateUp()
-//                || super.onSupportNavigateUp()
-//    }
+        //TODO for debug
+        val fragment = ProteinFragment.newInstance("")
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragmentContainerView, fragment)
+            .commit()
+    }
 }
