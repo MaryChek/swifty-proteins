@@ -47,7 +47,7 @@ class ProteinMapper {
     private fun parseConnect(id: String, parameters: List<String>): Connection {
         val atomIdsConnection = mutableListOf<String>()
         parameters.forEachIndexed { index, parameter ->
-            if (index > FIRST_CONNECT_ID) {
+            if (index >= FIRST_CONNECT_ID) {
                 atomIdsConnection.add(parameter)
             }
         }
