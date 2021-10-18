@@ -3,6 +3,8 @@ package com.example.swiftyproteins.presentation
 import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.fragment.app.Fragment
+import com.example.swiftyproteins.domain.models.Atom
+import com.google.ar.sceneform.math.Vector3
 import java.lang.Exception
 
 fun Fragment.getColor(@ColorRes colorResId: Int): Int =
@@ -17,3 +19,11 @@ fun Any.logD(message: String) {
     val logTag = this::class.java.simpleName
     Log.d(logTag, message)
 }
+
+fun Atom.Coordinate.toVec3() =
+    Vector3(x, y, z)
+
+fun String.splitOnlyWords(): List<String> =
+    split(" ").filter { string ->
+        string != ""
+    }

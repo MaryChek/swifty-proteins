@@ -109,6 +109,6 @@ class SceneRender {
         private const val SPHERE_RADIUS = .1F
         private val SPHERE_SCALE = Vector3(3f, 3f, 3f)
         private const val CYLINDER_RADIUS = .1F
-        private val DEFAULT_CAMERA_POSITION = Vector3(0f, 0f, 4f)
+        private val DEFAULT_CAMERA_POSITION = Vector3(0f, 0f, 20f)
     }
 }

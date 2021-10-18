@@ -4,12 +4,16 @@ class Atom(
     val id: String,
     val name: String,
     val coordinate: Coordinate,
-    val isHAtom: Boolean,
+    val base: BaseAtom,
     val connectList: List<String>
 ) {
     class Coordinate(
-        val x: Double,
-        val y: Double,
-        val z: Double
+        val x: Float,
+        val y: Float,
+        val z: Float
     )
+
+    enum class BaseAtom {
+        C, O, H, P, N, F, OTHER
+    }
 }

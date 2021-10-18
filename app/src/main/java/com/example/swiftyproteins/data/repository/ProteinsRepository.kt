@@ -1,14 +1,16 @@
 package com.example.swiftyproteins.data.repository
 
 import com.example.swiftyproteins.data.api.ProteinApiTalker
-import okhttp3.ResponseBody
+import com.example.swiftyproteins.data.mapper.ProteinMapper
+import com.example.swiftyproteins.domain.models.Atom
 
 class ProteinsRepository(
     private val apiTalker: ProteinApiTalker,
+    private val mapper: ProteinMapper
 ) {
-    fun getAtomByName(name: String, onSuccess: (ResponseBody) -> Unit) {
+    fun getAtomByName(name: String, onSuccess: (List<Atom>) -> Unit) {
         apiTalker.getProteinByName(name) { body ->
-            onSuccess(body)
+            onSuccess(mapper.map(body))
         }
     }
 }
