@@ -16,8 +16,17 @@ import com.example.swiftyproteins.presentation.fragments.base.BaseFragment
 import com.example.swiftyproteins.presentation.navigation.FromProtein
 import com.example.swiftyproteins.presentation.scene.SceneRender
 import com.example.swiftyproteins.presentation.toVec3
+import com.google.ar.core.Anchor
+import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.math.Vector3
+import com.google.ar.sceneform.math.Quaternion
+
+import com.google.ar.sceneform.ux.TransformableNode
+
+
+
 
 class ProteinFragment : BaseFragment<FromProtein>() {
 
@@ -43,10 +52,31 @@ class ProteinFragment : BaseFragment<FromProtein>() {
             sceneRender = SceneRender()
                 .initSceneView(sceneView)
                 .setBackground(getColor(R.color.color_background_scene))
-                .setOnNodeTouchListener(::onNodeTouch)
+                .setOnNodeTouchListener(requireContext(), ::onNodeTouch)
+                .setDisplayMetrics(resources.displayMetrics)
         }
         setNodesToScene()
     }
+
+//    private fun onPeekTouch(result: HitTestResult) {
+//        val anchor: Anchor = result.createAnchor()
+//        val anchorNode = AnchorNode(anchor)
+//        anchorNode.setParent(arFragment.getArSceneView().getScene())
+//
+//        // Create the transformable andy and add it to the anchor.
+//
+//        // Create the transformable andy and add it to the anchor.
+//        val node = TransformableNode(arFragment.getTransformationSystem())
+//
+//        //set rotation in direction (x,y,z) in degrees 90
+//
+//        //set rotation in direction (x,y,z) in degrees 90
+//        node.localRotation =
+//            Quaternion.axisAngle(Vector3(1f, 0f, 0f), 90f)
+//
+//        node.setParent(anchorNode)
+//        node.renderable = renderable
+//    }
 
     //TODO move to viewModel
     private fun onNodeTouch(node: Node) {
@@ -54,6 +84,26 @@ class ProteinFragment : BaseFragment<FromProtein>() {
             logD("click on $nameNode")
         }
     }
+
+//    private fun rotation() {
+//        val anchor: Anchor = hitResult.createAnchor()
+//        val anchorNode = AnchorNode(anchor)
+//        anchorNode.setParent(arFragment.getArSceneView().getScene())
+//
+//        // Create the transformable andy and add it to the anchor.
+//
+//        // Create the transformable andy and add it to the anchor.
+//        val node = TransformableNode(arFragment.getTransformationSystem())
+//
+//        //set rotation in direction (x,y,z) in degrees 90
+//
+//        //set rotation in direction (x,y,z) in degrees 90
+//        node.localRotation =
+//            Quaternion.axisAngle(Vector3(1f, 0, 0), 90f)
+//
+//        node.setParent(anchorNode)
+//        node.renderable = renderable
+//    }
 
     private fun setNodesToScene() {
         getProtein()
