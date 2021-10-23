@@ -5,10 +5,12 @@
     android:layout_height="match_parent">
 
     <Toolbar
+        android:id="@+id/toolbar"
         style="@style/CustomToolbar.Close"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:titleTextAppearance="@style/TextView.Normal.Big.Primary"/>
 
     <com.google.ar.sceneform.SceneView
         android:id="@+id/sceneView"

@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinViewBinding
 import com.example.swiftyproteins.domain.models.Atom
+import com.example.swiftyproteins.presentation.activity.MainActivity
 import com.example.swiftyproteins.presentation.getColor
 import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
 import com.example.swiftyproteins.presentation.models.Protein
@@ -32,10 +33,7 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initScene()
-        val proteinName: String? = arguments?.getString(ARG_PROTEIN_NAME)
-        proteinName?.let {
-            viewModel?.onViewCreated(proteinName)
-        }
+        initProtein()
     }
 
     private fun initScene() {
@@ -48,6 +46,19 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 }
                 .setDisplayMetrics(resources.displayMetrics)
         }
+    }
+
+    private fun initProtein() {
+        //Todo remove and get argument on init
+        val proteinName: String? = arguments?.getString(ARG_PROTEIN_NAME)
+        proteinName?.let {
+            viewModel?.onViewCreated(proteinName)
+            setupToolbarTitle(proteinName)
+        }
+    }
+
+    private fun setupToolbarTitle(proteinName: String) {
+        binding?.toolbar?.title = proteinName
     }
 
     override fun handleModel(model: Protein) {
@@ -67,34 +78,6 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 atomConnection.color
             )
         }
-    }
-
-    private fun showProtein(protein: List<Atom>) {
-//        protein.forEachIndexed { index, atom ->
-//            if (atom.base != Atom.BaseAtom.H) {
-//                val coordinate: Vector3 = atom.coordinate.toVec3()
-//                sceneRender?.setSphere(
-//                    requireContext(),
-//                    atom.name,
-//                    coordinate,
-//                    getAtomColor(atom.base)
-//                )
-//                atom.connectList.forEach { atomId ->
-//                    if (atomId.toInt() > index.minus(1)) {
-//                        protein.find { endAtom ->
-//                            endAtom.id == atomId && endAtom.base != Atom.BaseAtom.H
-//                        }?.coordinate?.toVec3()?.let { coordinateEnd ->
-//                            sceneRender?.setCylinder(
-//                                requireContext(),
-//                                coordinate,
-//                                coordinateEnd,
-//                                getColor(R.color.atom_connection)
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 
     override fun handleAction(action: FromProtein) {

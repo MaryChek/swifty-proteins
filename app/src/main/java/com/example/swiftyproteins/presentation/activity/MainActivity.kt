@@ -2,11 +2,12 @@ package com.example.swiftyproteins.presentation.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupActionBarWithNavController
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.View
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.ActivityMainBinding
-import com.example.swiftyproteins.presentation.fragments.ProteinFragment
+import com.example.swiftyproteins.presentation.fragments.ProteinListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,10 +19,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //TODO for debug
-        val fragment = ProteinFragment.newInstance("")
+        val fragment = ProteinListFragment()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragmentContainerView, fragment)
             .commit()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menu?.clear()
+        return super.onCreateOptionsMenu(menu)
     }
 }

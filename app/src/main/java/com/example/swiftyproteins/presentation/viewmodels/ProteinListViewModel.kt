@@ -5,8 +5,8 @@ import com.example.swiftyproteins.domain.interactor.ProteinInteractor
 import com.example.swiftyproteins.presentation.navigation.FromProteinList
 import com.example.swiftyproteins.presentation.viewmodels.base.BaseScreenStateViewModel
 
-class ProteinListViewModel(private val interactor: ProteinInteractor)
-    : BaseScreenStateViewModel<FromProteinList, List<String>>(emptyList()) {
+class ProteinListViewModel(private val interactor: ProteinInteractor) :
+    BaseScreenStateViewModel<FromProteinList, List<String>>(emptyList()) {
 
     private fun updateModel(model: List<String>) {
         this.model = model
@@ -23,12 +23,14 @@ class ProteinListViewModel(private val interactor: ProteinInteractor)
     }
 
     fun onSearchTextChanged(text: String) {
-        if (text.isNotBlank()) {
-            interactor.setFilterForProteins(text)
-            getLigands()
-        }
+        interactor.setFilterForProteins(text)
+        getLigands()
     }
 
     fun onProteinClick(proteinName: String) =
         handleNavigate(FromProteinList.Navigate.Protein(proteinName))
+
+    fun onBackPressed() {
+
+    }
 }

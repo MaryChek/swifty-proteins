@@ -20,7 +20,7 @@ class ProteinInteractor(
     fun getProteins(@RawRes fileResId: Int): List<String> =
         fileInteractor.getFileListString(fileResId).filter { line ->
             if (proteinsFilter.isNotBlank()) {
-                line.contains(proteinsFilter)
+                line.contains(proteinsFilter, true)
             } else {
                 true
             }

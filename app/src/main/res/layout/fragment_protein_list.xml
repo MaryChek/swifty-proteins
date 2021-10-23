@@ -3,27 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/app_background">
+    android:layout_height="match_parent">
 
-    <Toolbar
-        android:id="@+id/toolbar"
-        style="@style/CustomToolbar.Back.Bg"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/detailAppBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height='?attr/actionBarSize'
+        android:fitsSystemWindows="true"
+        app:elevation="0dp"
+        android:theme="@style/CustomActionbarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <SearchView
-        android:id="@+id/svLigand"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:imeOptions="flagNoExtractUi"
-        android:inputType="text"
-        android:layout_marginHorizontal="5dp"
-        android:background="@color/searchBg"
-        android:queryHint="@string/hint_search_ligand"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/detailToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            app:titleTextAppearance="@style/TextView.Normal" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvLigands"
@@ -33,7 +32,7 @@
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svLigand"
+        app:layout_constraintTop_toBottomOf="@+id/detailAppBarLayout"
         tools:itemCount="100"
         tools:listitem="@layout/item_ligand" />
 </androidx.constraintlayout.widget.ConstraintLayout>
