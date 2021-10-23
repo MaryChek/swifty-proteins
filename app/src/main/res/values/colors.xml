@@ -16,4 +16,13 @@
     <color name="toolbarBg">#AEFFFFFF</color>
 
     <color name="colorText">@color/black</color>
+
+    <color name="colorAtomC">@color/atom_connection</color>
+    <color name="colorAtomO">#CC0000</color>
+    <color name="colorAtomH">@color/white</color>
+    <color name="colorAtomN">#1432FA</color>
+    <color name="colorAtomP">#F8720B</color>
+    <color name="colorAtomF">#14AA03</color>
+    <color name="colorAtomS">#F8E00B</color>
+    <color name="colorOther">#CD0BF8</color>
 </resources>

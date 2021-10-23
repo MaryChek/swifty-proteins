@@ -76,6 +76,7 @@ class ProteinMapper {
             ATOM_P -> DomainAtom.BaseAtom.P
             ATOM_N -> DomainAtom.BaseAtom.N
             ATOM_F -> DomainAtom.BaseAtom.F
+            ATOM_S -> DomainAtom.BaseAtom.S
             else -> DomainAtom.BaseAtom.OTHER
         }
 
@@ -93,6 +94,7 @@ class ProteinMapper {
         private const val ATOM_P = "P"
         private const val ATOM_N = "N"
         private const val ATOM_F = "F"
+        private const val ATOM_S = "S"
         private const val FIRST_CONNECT_ID = 2
         private const val ATOM = "ATOM"
         private const val CONNECT = "CONECT"

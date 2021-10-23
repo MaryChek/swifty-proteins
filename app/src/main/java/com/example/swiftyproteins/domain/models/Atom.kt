@@ -14,6 +14,6 @@ class Atom(
     )
 
     enum class BaseAtom {
-        C, O, H, P, N, F, OTHER
+        C, O, H, P, N, F, S, OTHER
     }
 }

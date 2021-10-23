@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinViewBinding
-import com.example.swiftyproteins.domain.models.Atom
-import com.example.swiftyproteins.presentation.activity.MainActivity
 import com.example.swiftyproteins.presentation.getColor
 import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
 import com.example.swiftyproteins.presentation.models.Protein
@@ -67,7 +65,7 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 requireContext(),
                 atom.name,
                 atom.coordinate,
-                atom.color
+                getColor(atom.colorResId)
             )
         }
         model.atomConnections.forEach { atomConnection ->
@@ -75,7 +73,7 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 requireContext(),
                 atomConnection.coordinateTop,
                 atomConnection.coordinateBottom,
-                atomConnection.color
+                getColor(atomConnection.colorResId)
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.example.swiftyproteins.presentation.mapper
 
 import android.graphics.Color
+import com.example.swiftyproteins.R
 import com.example.swiftyproteins.presentation.models.Atom
 import com.example.swiftyproteins.presentation.models.AtomConnection
 import com.example.swiftyproteins.presentation.models.Protein
@@ -36,13 +37,14 @@ class ProteinMapper {
 
     private fun parseColor(baseAtom: DomainAtom.BaseAtom): Int =
         when (baseAtom) {
-            DomainAtom.BaseAtom.C -> Color.GRAY
-            DomainAtom.BaseAtom.O -> Color.RED
-            DomainAtom.BaseAtom.H -> Color.WHITE
-            DomainAtom.BaseAtom.N -> Color.BLUE
-            DomainAtom.BaseAtom.P -> Color.YELLOW
-            DomainAtom.BaseAtom.F -> Color.GREEN
-            DomainAtom.BaseAtom.OTHER -> Color.MAGENTA
+            DomainAtom.BaseAtom.C -> R.color.colorAtomC
+            DomainAtom.BaseAtom.O -> R.color.colorAtomO
+            DomainAtom.BaseAtom.H -> R.color.colorAtomH
+            DomainAtom.BaseAtom.N -> R.color.colorAtomN
+            DomainAtom.BaseAtom.P -> R.color.colorAtomP
+            DomainAtom.BaseAtom.F -> R.color.colorAtomF
+            DomainAtom.BaseAtom.S -> R.color.colorAtomS
+            DomainAtom.BaseAtom.OTHER -> R.color.colorOther
         }
 
     private fun getAtomConnections(
@@ -60,7 +62,7 @@ class ProteinMapper {
                     AtomConnection(
                         coordinateTop,
                         coordinateBottom,
-                        Color.GRAY
+                        R.color.atom_connection
                     )
                 }
             } else {
