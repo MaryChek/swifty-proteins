@@ -1,6 +1,5 @@
 package com.example.swiftyproteins.presentation.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,26 +8,14 @@ import androidx.core.os.bundleOf
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinViewBinding
 import com.example.swiftyproteins.domain.models.Atom
-import com.example.swiftyproteins.presentation.App
 import com.example.swiftyproteins.presentation.getColor
-import com.example.swiftyproteins.presentation.logD
-import com.example.swiftyproteins.presentation.fragments.base.BaseFragment
+import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
+import com.example.swiftyproteins.presentation.models.Protein
 import com.example.swiftyproteins.presentation.navigation.FromProtein
 import com.example.swiftyproteins.presentation.scene.SceneRender
-import com.example.swiftyproteins.presentation.toVec3
-import com.google.ar.core.Anchor
-import com.google.ar.sceneform.AnchorNode
-import com.google.ar.sceneform.HitTestResult
-import com.google.ar.sceneform.Node
-import com.google.ar.sceneform.math.Vector3
-import com.google.ar.sceneform.math.Quaternion
+import com.example.swiftyproteins.presentation.viewmodels.ProteinViewModel
 
-import com.google.ar.sceneform.ux.TransformableNode
-
-
-
-
-class ProteinFragment : BaseFragment<FromProtein>() {
+class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinViewModel>() {
 
     private var binding: FragmentProteinViewBinding? = null
     private var sceneRender: SceneRender? = null
@@ -45,6 +32,10 @@ class ProteinFragment : BaseFragment<FromProtein>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initScene()
+        val proteinName: String? = arguments?.getString(ARG_PROTEIN_NAME)
+        proteinName?.let {
+            viewModel?.onViewCreated(proteinName)
+        }
     }
 
     private fun initScene() {
@@ -52,117 +43,59 @@ class ProteinFragment : BaseFragment<FromProtein>() {
             sceneRender = SceneRender()
                 .initSceneView(sceneView)
                 .setBackground(getColor(R.color.color_background_scene))
-                .setOnNodeTouchListener(requireContext(), ::onNodeTouch)
+                .setOnNodeTouchListener(requireContext()) { node ->
+                    viewModel?.onNodeTouch(node)
+                }
                 .setDisplayMetrics(resources.displayMetrics)
         }
-        setNodesToScene()
     }
 
-//    private fun onPeekTouch(result: HitTestResult) {
-//        val anchor: Anchor = result.createAnchor()
-//        val anchorNode = AnchorNode(anchor)
-//        anchorNode.setParent(arFragment.getArSceneView().getScene())
-//
-//        // Create the transformable andy and add it to the anchor.
-//
-//        // Create the transformable andy and add it to the anchor.
-//        val node = TransformableNode(arFragment.getTransformationSystem())
-//
-//        //set rotation in direction (x,y,z) in degrees 90
-//
-//        //set rotation in direction (x,y,z) in degrees 90
-//        node.localRotation =
-//            Quaternion.axisAngle(Vector3(1f, 0f, 0f), 90f)
-//
-//        node.setParent(anchorNode)
-//        node.renderable = renderable
-//    }
-
-    //TODO move to viewModel
-    private fun onNodeTouch(node: Node) {
-        node.name?.let { nameNode ->
-            logD("click on $nameNode")
+    override fun handleModel(model: Protein) {
+        model.atoms.forEach { atom ->
+            sceneRender?.setSphere(
+                requireContext(),
+                atom.name,
+                atom.coordinate,
+                atom.color
+            )
         }
-    }
-
-//    private fun rotation() {
-//        val anchor: Anchor = hitResult.createAnchor()
-//        val anchorNode = AnchorNode(anchor)
-//        anchorNode.setParent(arFragment.getArSceneView().getScene())
-//
-//        // Create the transformable andy and add it to the anchor.
-//
-//        // Create the transformable andy and add it to the anchor.
-//        val node = TransformableNode(arFragment.getTransformationSystem())
-//
-//        //set rotation in direction (x,y,z) in degrees 90
-//
-//        //set rotation in direction (x,y,z) in degrees 90
-//        node.localRotation =
-//            Quaternion.axisAngle(Vector3(1f, 0, 0), 90f)
-//
-//        node.setParent(anchorNode)
-//        node.renderable = renderable
-//    }
-
-    private fun setNodesToScene() {
-        getProtein()
-    }
-
-    //TODO move to ViewModel
-    private fun getProtein() {
-        //TODO get proteinName from file ligands.txt
-        val proteinName = "002"
-        getFile(proteinName)
-    }
-
-    private fun getFile(proteinName: String) {
-        val app: App = requireActivity().applicationContext as App
-        val interactor = app.interactor
-        interactor.getProteinByName(proteinName) { protein ->
-            showProtein(protein)
+        model.atomConnections.forEach { atomConnection ->
+            sceneRender?.setCylinder(
+                requireContext(),
+                atomConnection.coordinateTop,
+                atomConnection.coordinateBottom,
+                atomConnection.color
+            )
         }
     }
 
     private fun showProtein(protein: List<Atom>) {
-        protein.forEachIndexed { index, atom ->
-            if (atom.base != Atom.BaseAtom.H) {
-                val coordinate: Vector3 = atom.coordinate.toVec3()
-                sceneRender?.setSphere(
-                    requireContext(),
-                    atom.name,
-                    coordinate,
-                    getAtomColor(atom.base)
-                )
-                atom.connectList.forEach { atomId ->
-                    if (atomId.toInt() > index.minus(1)) {
-                        protein.find { endAtom ->
-                            endAtom.id == atomId && endAtom.base != Atom.BaseAtom.H
-                        }?.coordinate?.toVec3()?.let { coordinateEnd ->
-                            sceneRender?.setCylinder(
-                                requireContext(),
-                                coordinate,
-                                coordinateEnd,
-                                getColor(R.color.atom_connection)
-                            )
-                        }
-                    }
-                }
-            }
-        }
+//        protein.forEachIndexed { index, atom ->
+//            if (atom.base != Atom.BaseAtom.H) {
+//                val coordinate: Vector3 = atom.coordinate.toVec3()
+//                sceneRender?.setSphere(
+//                    requireContext(),
+//                    atom.name,
+//                    coordinate,
+//                    getAtomColor(atom.base)
+//                )
+//                atom.connectList.forEach { atomId ->
+//                    if (atomId.toInt() > index.minus(1)) {
+//                        protein.find { endAtom ->
+//                            endAtom.id == atomId && endAtom.base != Atom.BaseAtom.H
+//                        }?.coordinate?.toVec3()?.let { coordinateEnd ->
+//                            sceneRender?.setCylinder(
+//                                requireContext(),
+//                                coordinate,
+//                                coordinateEnd,
+//                                getColor(R.color.atom_connection)
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
-
-    //TODO move to ViewModel
-    private fun getAtomColor(atom: Atom.BaseAtom) =
-        when (atom) {
-            Atom.BaseAtom.C -> getColor(R.color.atom_connection)
-            Atom.BaseAtom.O -> Color.RED
-            Atom.BaseAtom.H -> Color.WHITE
-            Atom.BaseAtom.N -> Color.BLUE
-            Atom.BaseAtom.P -> Color.YELLOW
-            Atom.BaseAtom.F -> Color.GREEN
-            Atom.BaseAtom.OTHER -> Color.MAGENTA
-        }
 
     override fun handleAction(action: FromProtein) {
         when (action) {
@@ -187,6 +120,9 @@ class ProteinFragment : BaseFragment<FromProtein>() {
         sceneRender?.onDestroy()
         binding = null
     }
+
+    override fun getViewModelClass(): Class<ProteinViewModel> =
+        ProteinViewModel::class.java
 
     companion object {
         private const val ARG_PROTEIN_NAME = "protein_name"

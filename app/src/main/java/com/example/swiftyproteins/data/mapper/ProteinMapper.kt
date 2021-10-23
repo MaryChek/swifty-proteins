@@ -10,6 +10,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
+//TODO in data rename to ligand
 class ProteinMapper {
     fun map(resource: ResponseBody): List<DomainAtom> {
         val inStream: InputStream = resource.byteStream()

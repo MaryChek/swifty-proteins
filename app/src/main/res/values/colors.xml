@@ -10,4 +10,10 @@
     <color name="color_background_scene">#4C5053</color>
     <color name="transparent">#0000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="cardBg">#C5B2E0</color>
+    <color name="searchBg">@color/white</color>
+    <color name="toolbarBg">#AEFFFFFF</color>
+
+    <color name="colorText">@color/black</color>
 </resources>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">swiftyProteins</string>
+    <string name="hint_search_ligand">Имя лиганда</string>
 </resources>

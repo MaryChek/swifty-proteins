@@ -38,6 +38,7 @@ class SceneRender {
             pos?.let {
                 sceneView?.scene?.camera?.worldPosition = it
             }
+            sceneView?.scene?.children?.get(0)?.renderable
             return true
         }
 
