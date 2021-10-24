@@ -33,11 +33,14 @@ class ProteinListFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initList()
+        binding?.toolbar?.setNavigationOnClickListener {
+            viewModel?.onBackPressed()
+        }
         viewModel?.onViewCreated()
     }
 
     private fun initToolbar() {
-        binding?.detailToolbar?.let { toolbar ->
+        binding?.toolbar?.let { toolbar ->
             (requireActivity() as MainActivity).apply {
                 setSupportActionBar(toolbar)
                 supportActionBar?.setHomeButtonEnabled(true)
@@ -72,14 +75,6 @@ class ProteinListFragment :
             })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> viewModel?.onBackPressed()
-            else -> return super.onOptionsItemSelected(item)
-        }
-        return true
-    }
-
     private fun initList() {
         adapter = LigandListAdapter { name ->
             viewModel?.onProteinClick(name)
@@ -96,12 +91,10 @@ class ProteinListFragment :
         when (action) {
             is FromProteinList.Navigate.Protein -> {
                 //TODO remove and uncomment router
-                binding?.root?.let {
-                    val fragment = ProteinFragment.newInstance(action.proteinName)
-                    (activity as MainActivity).supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView, fragment)
-                        .commit()
-                }
+                val fragment = ProteinFragment.newInstance(action.proteinName)
+                (activity as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView, fragment)
+                    .commit()
 //                router.navigateTo(action.proteinName)
             }
         }

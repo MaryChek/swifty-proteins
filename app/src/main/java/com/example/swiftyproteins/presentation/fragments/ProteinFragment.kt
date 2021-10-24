@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinViewBinding
+import com.example.swiftyproteins.presentation.activity.MainActivity
 import com.example.swiftyproteins.presentation.getColor
 import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
 import com.example.swiftyproteins.presentation.models.Protein
 import com.example.swiftyproteins.presentation.navigation.FromProtein
 import com.example.swiftyproteins.presentation.scene.SceneRender
 import com.example.swiftyproteins.presentation.viewmodels.ProteinViewModel
+import com.google.ar.sceneform.math.Vector3
 
 class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinViewModel>() {
 
@@ -32,6 +34,9 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
         super.onViewCreated(view, savedInstanceState)
         initScene()
         initProtein()
+        binding?.toolbar?.setNavigationOnClickListener {
+            viewModel?.onBackClick()
+        }
     }
 
     private fun initScene() {
@@ -44,6 +49,8 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 }
                 .setDisplayMetrics(resources.displayMetrics)
         }
+//        binding?.sceneView?.scene?.camera?.farClipPlane = 100f
+//        binding?.sceneView?.scene?.camera?.worldPosition = Vector3(0f, 0f, 200f)
     }
 
     private fun initProtein() {
@@ -60,6 +67,7 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
     }
 
     override fun handleModel(model: Protein) {
+        sceneRender?.setCameraPosition(model.cameraPosition)
         model.atoms.forEach { atom ->
             sceneRender?.setSphere(
                 requireContext(),
@@ -81,6 +89,10 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
     override fun handleAction(action: FromProtein) {
         when (action) {
             is FromProtein.Navigate.Back -> {
+                val fragment = ProteinListFragment()
+                (activity as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView, fragment)
+                    .commit()
 //                router.exit()
             }
         }

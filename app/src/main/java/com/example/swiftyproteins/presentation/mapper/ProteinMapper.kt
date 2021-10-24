@@ -1,6 +1,5 @@
 package com.example.swiftyproteins.presentation.mapper
 
-import android.graphics.Color
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.presentation.models.Atom
 import com.example.swiftyproteins.presentation.models.AtomConnection
@@ -44,6 +43,46 @@ class ProteinMapper {
             DomainAtom.BaseAtom.P -> R.color.colorAtomP
             DomainAtom.BaseAtom.F -> R.color.colorAtomF
             DomainAtom.BaseAtom.S -> R.color.colorAtomS
+            DomainAtom.BaseAtom.BR -> R.color.colorAtomBR
+            DomainAtom.BaseAtom.B -> R.color.colorAtomB
+            DomainAtom.BaseAtom.CL -> R.color.colorAtomCL
+            DomainAtom.BaseAtom.MO -> R.color.colorAtomMO
+            DomainAtom.BaseAtom.I -> R.color.colorAtomI
+            DomainAtom.BaseAtom.AU -> R.color.colorAtomAU
+            DomainAtom.BaseAtom.V -> R.color.colorAtomV
+            DomainAtom.BaseAtom.CO -> R.color.colorAtomCO
+            DomainAtom.BaseAtom.BA -> R.color.colorAtomBA
+            DomainAtom.BaseAtom.MG -> R.color.colorAtomMG
+            DomainAtom.BaseAtom.CU -> R.color.colorAtomCU
+            DomainAtom.BaseAtom.CA -> R.color.colorAtomCA
+            DomainAtom.BaseAtom.AS -> R.color.colorAtomAS
+            DomainAtom.BaseAtom.CD -> R.color.colorAtomCD
+            DomainAtom.BaseAtom.CS -> R.color.colorAtomCS
+            DomainAtom.BaseAtom.EU -> R.color.colorAtomEU
+            DomainAtom.BaseAtom.FE -> R.color.colorAtomFE
+            DomainAtom.BaseAtom.GA -> R.color.colorAtomGA
+            DomainAtom.BaseAtom.HG -> R.color.colorAtomHG
+            DomainAtom.BaseAtom.U -> R.color.colorAtomU
+            DomainAtom.BaseAtom.K -> R.color.colorAtomK
+            DomainAtom.BaseAtom.LA -> R.color.colorAtomLA
+            DomainAtom.BaseAtom.LI -> R.color.colorAtomLI
+            DomainAtom.BaseAtom.MN -> R.color.colorAtomMN
+            DomainAtom.BaseAtom.SE -> R.color.colorAtomSE
+            DomainAtom.BaseAtom.NA -> R.color.colorAtomNA
+            DomainAtom.BaseAtom.NI -> R.color.colorAtomNI
+            DomainAtom.BaseAtom.PB -> R.color.colorAtomPB
+            DomainAtom.BaseAtom.PD -> R.color.colorAtomPD
+            DomainAtom.BaseAtom.PT -> R.color.colorAtomPT
+            DomainAtom.BaseAtom.W -> R.color.colorAtomW
+            DomainAtom.BaseAtom.RB -> R.color.colorAtomRB
+            DomainAtom.BaseAtom.RH -> R.color.colorAtomRH
+            DomainAtom.BaseAtom.RU -> R.color.colorAtomRU
+            DomainAtom.BaseAtom.SR -> R.color.colorAtomSR
+            DomainAtom.BaseAtom.TB -> R.color.colorAtomTB
+            DomainAtom.BaseAtom.TL -> R.color.colorAtomTL
+            DomainAtom.BaseAtom.XE -> R.color.colorAtomXE
+            DomainAtom.BaseAtom.YB -> R.color.colorAtomYB
+            DomainAtom.BaseAtom.ZN -> R.color.colorAtomZN
             DomainAtom.BaseAtom.OTHER -> R.color.colorOther
         }
 

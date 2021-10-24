@@ -13,6 +13,7 @@ import com.google.ar.sceneform.ux.FootprintSelectionVisualizer
 import com.google.ar.sceneform.ux.TransformationSystem
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.OnScaleGestureListener
+import com.example.swiftyproteins.presentation.logD
 
 class SceneRender {
     private var sceneView: SceneView? = null
@@ -20,8 +21,8 @@ class SceneRender {
     private var transformationSystem: TransformationSystem? = null
     private var scaleGestureDetector: ScaleGestureDetector? = null
     private var scaleFactor = 1f
+    private var rootNode: Node? = null
 
-    //Слушатель получения scale при "щипке"
     private val onScaleGestureListener = object : OnScaleGestureListener {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             scaleFactor *= detector.scaleFactor
@@ -33,12 +34,7 @@ class SceneRender {
                 }
 
             scaleFactor = (scaleFactor * 100).toInt().toFloat() / 100
-
-            val pos = sceneView?.scene?.camera?.forward?.scaled(scaleFactor)
-            pos?.let {
-                sceneView?.scene?.camera?.worldPosition = it
-            }
-            sceneView?.scene?.children?.get(0)?.renderable
+            rootNode?.worldScale = Vector3(scaleFactor, scaleFactor, scaleFactor)
             return true
         }
 
@@ -53,7 +49,13 @@ class SceneRender {
     fun initSceneView(scene: SceneView): SceneRender {
         sceneView = scene
         sceneView?.scene?.camera?.worldPosition = DEFAULT_CAMERA_POSITION
+        scene.scene?.camera?.farClipPlane = FAR_CLIP_PLANE
+        createRootNode()
         return this
+    }
+
+    fun setCameraPosition(position: Vector3) {
+        sceneView?.scene?.camera?.worldPosition = position
     }
 
     fun setBackground(color: Int): SceneRender {
@@ -83,36 +85,25 @@ class SceneRender {
             scaleGestureDetector?.onTouchEvent(motionEvent)
             transformationSystem?.onTouch(hitTestResult, motionEvent)
             hitTestResult.node?.let { node ->
-                if (node.name.isNotBlank()) {
-                    onNodeTouchListener?.invoke(node)
+                if (motionEvent.action == 0 && scaleGestureDetector?.isInProgress == false) {
+                    logD("motionEvent time: ${motionEvent.downTime}")
+
+                    if (node.name.isNotBlank()) {
+                        onNodeTouchListener?.invoke(node)
+                        logD("name: ${node.name}")
+                    }
                 }
             }
         }
     }
 
-    /*
-    * --------------------------------------------------------------------------
-    * Method: spacing Parameters: MotionEvent Returns: float Description:
-    * checks the spacing between the two fingers on touch
-    * ----------------------------------------------------
-    */
-//    private fun spacing(event: MotionEvent): Float {
-//        val x = event.getX(0) - event.getX(1)
-//        val y = event.getY(0) - event.getY(1)
-//        return kotlin.math.sqrt(x * x + y * y)
-//    }
-
-    /*
-     * --------------------------------------------------------------------------
-     * Method: midPoint Parameters: PointF object, MotionEvent Returns: void
-     * Description: calculates the midpoint between the two fingers
-     * ------------------------------------------------------------
-     */
-//    private fun midPoint(point: PointF, event: MotionEvent): PointF {
-//        val x = event.getX(0) + event.getX(1)
-//        val y = event.getY(0) + event.getY(1)
-//        point[x / 2] = y / 2
-//    }
+    fun createRootNode(){
+        rootNode = Node()
+        rootNode?.name = "root"
+        rootNode?.worldPosition = Vector3(0f, 0f, 0f)
+        rootNode?.worldScale = Vector3(1f, 1f, 1f)
+        sceneView?.scene?.addChild(rootNode)
+    }
 
     fun setSphere(context: Context, name: String, position: Vector3, color: Int) {
         MaterialFactory.makeOpaqueWithColor(context, Color(color))
@@ -166,7 +157,7 @@ class SceneRender {
     }
 
     private fun addNodeToScene(node: Node) =
-        sceneView?.scene?.apply {
+        rootNode?.apply {
             addChild(node)
             node.selectIfRequired()
         }
@@ -203,5 +194,6 @@ class SceneRender {
         private val SPHERE_SCALE = Vector3(4f, 4f, 4f)
         private const val CYLINDER_RADIUS = .1F
         private val DEFAULT_CAMERA_POSITION = Vector3(0f, 0f, 20f)
+        private const val FAR_CLIP_PLANE = 50f
     }
 }

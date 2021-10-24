@@ -19,10 +19,15 @@ class ProteinViewModel(
     }
 
     fun onViewCreated(proteinName: String) {
-        interactor.getProteinByName(proteinName) { ligand ->
-            val atoms = mapper.map(ligand)
-            updateModel(atoms)
-        }
+        interactor.getProteinByName(proteinName,
+            onSuccess = { ligand ->
+                val atoms = mapper.map(ligand)
+                updateModel(atoms)
+            },
+            onError = {
+                //TODO show errorMessage
+                onBackClick()
+            })
     }
 
     fun onNodeTouch(node: Node) {
@@ -30,4 +35,7 @@ class ProteinViewModel(
             logD(it)
         }
     }
+
+    fun onBackClick() =
+        handleNavigate(FromProtein.Navigate.Back)
 }

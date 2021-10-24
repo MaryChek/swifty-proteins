@@ -7,7 +7,7 @@ import com.example.swiftyproteins.data.mapper.ProteinMapper
 import com.example.swiftyproteins.data.repository.ProteinsRepository
 import com.example.swiftyproteins.domain.interactor.FileInteractor
 import com.example.swiftyproteins.domain.interactor.ProteinInteractor
-import com.example.swiftyproteins.presentation.viewmodels.ProteinListViewModel
+import com.example.swiftyproteins.domain.mapper.ProteinMapper as DomainProteinMapper
 import okhttp3.OkHttpClient
 
 class App: Application() {
@@ -22,7 +22,7 @@ class App: Application() {
         val apiTalker = ProteinApiTalker(client)
         val repository = ProteinsRepository(apiTalker, ProteinMapper())
         val fileInteractor = FileInteractor(applicationContext)
-        val interactor = ProteinInteractor(repository, fileInteractor)
+        val interactor = ProteinInteractor(repository, fileInteractor, DomainProteinMapper())
         viewModelFactory = PokemonViewModelFactory(interactor)
     }
 
