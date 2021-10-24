@@ -14,8 +14,8 @@ abstract class BaseViewModel<ActionType: Action>: ViewModel() {
 //    val modelUpdated = MutableLiveData<Model>()
     val actionUpdated: LiveData<ActionType> = action
 
-    protected fun handleNavigate(destination: ActionType) {
-        action.value = destination
+    protected fun handleAction(action: ActionType) {
+        this.action.value = action
     }
 
 //    protected fun updateMode() {

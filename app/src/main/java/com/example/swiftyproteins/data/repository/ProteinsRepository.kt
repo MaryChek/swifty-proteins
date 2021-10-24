@@ -2,6 +2,7 @@ package com.example.swiftyproteins.data.repository
 
 import com.example.swiftyproteins.data.api.ProteinApiTalker
 import com.example.swiftyproteins.data.mapper.ProteinMapper
+import com.example.swiftyproteins.data.model.ErrorType
 import com.example.swiftyproteins.domain.models.Atom
 import com.example.swiftyproteins.presentation.logE
 import okhttp3.ResponseBody
@@ -15,20 +16,22 @@ class ProteinsRepository(
     private val apiTalker: ProteinApiTalker,
     private val mapper: ProteinMapper
 ) {
-    fun getAtomByName(name: String, onSuccess: (List<Atom>) -> Unit, onError: () -> Unit) {
-        apiTalker.getProteinByName(name) { body ->
-            readResource(
-                body,
-                onSuccess = { list ->
-                    onSuccess(mapper.map(list))
-                },
-                onError = {
-                    onError()
-                    //TODO show error message and go to previous page
-                    logE("missing file")
-                }
-            )
-        }
+    fun getAtomByName(name: String, onSuccess: (List<Atom>) -> Unit, onError: (ErrorType) -> Unit) {
+        apiTalker.getProteinByName(
+            name,
+            onSuccess = { body ->
+                readResource(
+                    body,
+                    onSuccess = { list ->
+                        onSuccess(mapper.map(list))
+                    },
+                    onError = {
+                        onError(ErrorType.NotFound)
+                    }
+                )
+            },
+            onError = onError
+        )
     }
 
     private fun readResource(

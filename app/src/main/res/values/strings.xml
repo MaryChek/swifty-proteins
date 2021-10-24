@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">swiftyProteins</string>
     <string name="hint_search_ligand">Имя лиганда</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="network_error_message">Проблема с интернет соединением,  подключитесь к интернету и попробуйте снова</string>
+    <string name="error">Ошибка</string>
+    <string name="missing_protein_error_message">К сожалению, этот протеин больше не существует на сервере</string>
+    <string name="cancel">Отмена</string>
+    <string name="retry">Повторить</string>
+    <string name="ok">Ок</string>
 </resources>

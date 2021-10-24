@@ -10,7 +10,7 @@ open class BaseApiTalker {
     fun getResult(
         call: Call<ResponseBody>,
         onSuccess: (ResponseBody) -> Unit,
-        onError: (String) -> Unit
+        onError: (Int, String) -> Unit
     ) {
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -18,12 +18,12 @@ open class BaseApiTalker {
                 if (response.isSuccessful && pokemonResource != null) {
                     onSuccess.invoke(pokemonResource)
                 } else {
-                    onError(" ${response.code()} ${response.message()}")
+                    onError(response.code(), " ${response.code()} ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                onError(NETWORK_FAIL + t.message)
+                onError(0, NETWORK_FAIL + t.message)
             }
         })
     }

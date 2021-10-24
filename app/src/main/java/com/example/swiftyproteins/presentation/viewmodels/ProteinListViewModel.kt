@@ -28,7 +28,7 @@ class ProteinListViewModel(private val interactor: ProteinInteractor) :
     }
 
     fun onProteinClick(proteinName: String) =
-        handleNavigate(FromProteinList.Navigate.Protein(proteinName))
+        handleAction(FromProteinList.Navigate.Protein(proteinName))
 
     fun onBackPressed() {
 

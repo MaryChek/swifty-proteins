@@ -5,16 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinViewBinding
 import com.example.swiftyproteins.presentation.activity.MainActivity
+import com.example.swiftyproteins.presentation.dialog.DialogCreator
 import com.example.swiftyproteins.presentation.getColor
 import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
 import com.example.swiftyproteins.presentation.models.Protein
+import com.example.swiftyproteins.presentation.models.ProteinError
+import com.example.swiftyproteins.presentation.models.State
 import com.example.swiftyproteins.presentation.navigation.FromProtein
 import com.example.swiftyproteins.presentation.scene.SceneRender
 import com.example.swiftyproteins.presentation.viewmodels.ProteinViewModel
-import com.google.ar.sceneform.math.Vector3
 
 class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinViewModel>() {
 
@@ -95,6 +98,38 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                     .commit()
 //                router.exit()
             }
+            is FromProtein.Command.ShowNotFoundErrorDialog ->
+                showNotFoundDialog(action.error)
+            is FromProtein.Command.ShowNetworkErrorDialog ->
+                showNetworkErrorDialog(action.error)
+        }
+    }
+
+    private fun showNotFoundDialog(error: ProteinError) {
+        viewModel?.let { vm ->
+            DialogCreator().showNotFoundErrorDialog(
+                requireContext(),
+                error,
+                vm::onNotFoundDialogCancelable
+            )
+        }
+    }
+
+    private fun showNetworkErrorDialog(error: ProteinError) {
+        viewModel?.let { vm ->
+            DialogCreator().showNetworkErrorDialog(
+                requireContext(),
+                error,
+                vm::onNetworkErrorDialogCancelable,
+                vm::onNetworkErrorDialogRetryClick
+            )
+        }
+    }
+
+    override fun handleState(state: State) {
+        when (state) {
+            is State.Loading -> binding?.progressBar?.isVisible = true
+            is State.Success -> binding?.progressBar?.isVisible = false
         }
     }
 
