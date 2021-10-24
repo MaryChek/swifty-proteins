@@ -2,6 +2,7 @@ package com.example.swiftyproteins.domain.interactor
 
 import androidx.annotation.RawRes
 import com.example.swiftyproteins.data.repository.ProteinsRepository
+import com.example.swiftyproteins.data.storage.SearchStorage
 import com.example.swiftyproteins.domain.mapper.ProteinMapper
 import com.example.swiftyproteins.domain.models.Atom
 
@@ -9,6 +10,7 @@ import com.example.swiftyproteins.domain.models.Atom
 class ProteinInteractor(
     private val repository: ProteinsRepository,
     private val fileInteractor: FileInteractor,
+    private val searchStorage: SearchStorage,
     private val mapper: ProteinMapper,
 ) {
     private var proteinsFilter: String = ""
@@ -34,4 +36,10 @@ class ProteinInteractor(
                 true
             }
         }
+
+    fun setSearchString(text: String) =
+        searchStorage.putSearchString(text)
+
+    fun getProteinFilter(text: String) =
+        proteinsFilter
 }

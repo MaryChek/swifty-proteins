@@ -27,10 +27,10 @@ class SceneRender {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             scaleFactor *= detector.scaleFactor
             scaleFactor =
-                if (scaleFactor < 1) {
-                    1F
-                } else {
-                    scaleFactor
+                when {
+                    scaleFactor < 1 -> 1F
+                    scaleFactor >= 5f -> 5f
+                    else -> scaleFactor
                 }
 
             scaleFactor = (scaleFactor * 100).toInt().toFloat() / 100
@@ -97,7 +97,7 @@ class SceneRender {
         }
     }
 
-    fun createRootNode(){
+    private fun createRootNode(){
         rootNode = Node()
         rootNode?.name = "root"
         rootNode?.worldPosition = Vector3(0f, 0f, 0f)
