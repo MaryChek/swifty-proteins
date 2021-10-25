@@ -14,6 +14,7 @@
     <color name="cardBg">#C5B2E0</color>
     <color name="searchBg">@color/white</color>
     <color name="toolbarBg">#AEFFFFFF</color>
+    <color name="app_background">#1B0050</color>
 
     <color name="colorText">@color/black</color>
 

@@ -11,8 +11,10 @@
         android:layout_height='?attr/actionBarSize'
         android:fitsSystemWindows="true"
         app:elevation="0dp"
+        android:contentInsetEnd="20dp"
         android:theme="@style/CustomActionbarTheme"
         app:layout_constraintEnd_toEndOf="parent"
+        app:contentInsetEnd="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,6 +22,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentInsetEnd="20dp"
+            app:contentInsetEnd="0dp"
             android:background="@android:color/transparent"
             app:titleTextAppearance="@style/TextView.Normal" />
     </com.google.android.material.appbar.AppBarLayout>

@@ -8,6 +8,7 @@ import android.view.View
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.ActivityMainBinding
 import com.example.swiftyproteins.presentation.fragments.ProteinListFragment
+import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +20,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //TODO for debug
+        binding.root.postDelayed({ createRootFragment() }, 5000)
+
+    }
+
+    private fun createRootFragment() {
         val fragment = ProteinListFragment()
         supportFragmentManager
             .beginTransaction()
