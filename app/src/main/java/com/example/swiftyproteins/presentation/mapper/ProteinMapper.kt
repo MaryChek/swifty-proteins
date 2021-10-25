@@ -9,6 +9,9 @@ import com.google.ar.sceneform.math.Vector3
 import com.example.swiftyproteins.domain.models.Atom as DomainAtom
 
 class ProteinMapper {
+    fun mapAtomName(name: String): String =
+        name.split('_')[0]
+
     fun map(ligand: List<DomainAtom>, isAtomHVisible: Boolean = false): Protein {
         val atoms = mutableListOf<Atom>()
         val atomsConnection = mutableListOf<AtomConnection>()
@@ -18,7 +21,7 @@ class ProteinMapper {
 
                 atoms.add(
                     Atom(
-                        atom.name,
+                        ("${atom.base.name}_${atom.name}"),
                         coordinateAtom,
                         parseColor(atom.base)
                     )

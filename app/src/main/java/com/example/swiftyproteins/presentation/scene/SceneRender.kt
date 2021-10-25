@@ -85,6 +85,8 @@ class SceneRender {
             scaleGestureDetector?.onTouchEvent(motionEvent)
             transformationSystem?.onTouch(hitTestResult, motionEvent)
             hitTestResult.node?.let { node ->
+
+                logD("node name: " + node.name)
                 if (motionEvent.action == 0 && scaleGestureDetector?.isInProgress == false) {
                     logD("motionEvent time: ${motionEvent.downTime}")
 
@@ -99,9 +101,9 @@ class SceneRender {
 
     private fun createRootNode(){
         rootNode = Node()
-        rootNode?.name = "root"
-        rootNode?.worldPosition = Vector3(0f, 0f, 0f)
-        rootNode?.worldScale = Vector3(1f, 1f, 1f)
+        rootNode?.name = ROOT_NODE_NAME
+        rootNode?.worldPosition = ROOT_NODE_POSITION
+        rootNode?.worldScale = ROOT_NODE_SCALE
         sceneView?.scene?.addChild(rootNode)
     }
 
@@ -186,13 +188,21 @@ class SceneRender {
     }
 
     companion object {
+        private const val ROOT_NODE_NAME = "root"
+        private val ROOT_NODE_POSITION = Vector3(0f, 0f, 0f)
+        private val ROOT_NODE_SCALE = Vector3(1f, 1f, 1f)
+
         private const val DEFAULT_NODE_RADIUS = 15.0f
+
         private val AXIS_X = Vector3(1.0f, 0.0f, 0.0f)
         private const val AXIS_ROTATION_ANGLE = 90f
         private const val HALF = .5f
+
         private const val SPHERE_RADIUS = .15F
         private val SPHERE_SCALE = Vector3(4f, 4f, 4f)
+
         private const val CYLINDER_RADIUS = .1F
+
         private val DEFAULT_CAMERA_POSITION = Vector3(0f, 0f, 20f)
         private const val FAR_CLIP_PLANE = 50f
     }

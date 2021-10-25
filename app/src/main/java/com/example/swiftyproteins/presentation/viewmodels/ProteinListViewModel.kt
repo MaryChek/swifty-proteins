@@ -18,7 +18,7 @@ class ProteinListViewModel(private val interactor: ProteinInteractor) :
     }
 
     private fun getLigands() {
-        val proteinNames: List<String> = interactor.getProteins(R.raw.ligands)
+        val proteinNames: List<String> = interactor.getProteins()
         updateModel(proteinNames)
     }
 

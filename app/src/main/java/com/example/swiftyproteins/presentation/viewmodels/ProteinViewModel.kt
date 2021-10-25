@@ -1,5 +1,6 @@
 package com.example.swiftyproteins.presentation.viewmodels
 
+import com.example.swiftyproteins.data.model.AtomsInfo
 import com.example.swiftyproteins.data.model.ErrorType
 import com.example.swiftyproteins.domain.interactor.ProteinInteractor
 import com.example.swiftyproteins.presentation.logD
@@ -72,9 +73,15 @@ class ProteinViewModel(
     }
 
     fun onNodeTouch(node: Node) {
-        node.name?.let {
-            logD(it)
+        node.name?.let { name ->
+            interactor.getAtomInfoByBaseName(mapper.mapAtomName(name))?.let { atomInfo ->
+                showAtomInfo(atomInfo)
+            } ?: "information about $name not found"
         }
+    }
+
+    private fun showAtomInfo(atomInfo: AtomsInfo.AtomInfo) {
+        logD(atomInfo.toString())
     }
 
     fun onBackClick() =
