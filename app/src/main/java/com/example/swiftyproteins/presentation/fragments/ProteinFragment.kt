@@ -22,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.swiftyproteins.data.model.AtomsInfo
+import com.example.swiftyproteins.presentation.models.ModelAtomInfo
 
 
 class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinViewModel>() {
@@ -53,10 +54,19 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
 
     override fun setupObserve() {
         super.setupObserve()
-        viewModel?.atomInfo?.observe(viewLifecycleOwner, ::handleAtomInfo)
+        viewModel?.modelAtomInfo?.observe(viewLifecycleOwner, ::handleAtomInfo)
     }
 
-    private fun handleAtomInfo(model: AtomsInfo.AtomInfo) {
+    private fun handleAtomInfo(model: ModelAtomInfo) {
+        binding?.bottomSheet?.tvAtomMass?.text = model.atomInfo.atomicMass
+        binding?.bottomSheet?.layoutBoiling?.isVisible = model.isBoilingPointVisible
+        binding?.bottomSheet?.tvBoilingPoint?.text =
+            getString(R.string.degree_celsius, model.atomInfo.boil)
+        binding?.bottomSheet?.layoutMeltingPoint?.isVisible = model.isMeltingPointVisible
+        binding?.bottomSheet?.tvMeltingPoint?.text =
+            getString(R.string.degree_celsius, model.atomInfo.melt)
+        binding?.bottomSheet?.tvName?.text = model.atomFullName
+        binding?.bottomSheet?.tvSummary?.text = model.atomInfo.summary
     }
 
     private fun initScene() {

@@ -6,6 +6,7 @@ import com.example.swiftyproteins.data.model.ErrorType
 import com.example.swiftyproteins.domain.interactor.ProteinInteractor
 import com.example.swiftyproteins.presentation.logE
 import com.example.swiftyproteins.presentation.mapper.ProteinMapper
+import com.example.swiftyproteins.presentation.models.ModelAtomInfo
 import com.example.swiftyproteins.presentation.models.Protein
 import com.example.swiftyproteins.presentation.models.ProteinError
 import com.example.swiftyproteins.presentation.models.State
@@ -21,7 +22,7 @@ class ProteinViewModel(
 ) : BaseScreenStateViewModel<FromProtein, Protein>(Protein()) {
 
     private var proteinName: String? = null
-    var atomInfo: MutableLiveData<AtomsInfo.AtomInfo> = SingleEvent()
+    var modelAtomInfo: MutableLiveData<ModelAtomInfo> = SingleEvent()
 
     private fun updateModel(atoms: Protein) {
         model = atoms
@@ -84,7 +85,7 @@ class ProteinViewModel(
     }
 
     private fun showAtomInfo(atomInfo: AtomsInfo.AtomInfo) {
-        this.atomInfo.value = atomInfo
+        this.modelAtomInfo.value = ModelAtomInfo(atomInfo)
         handleAction(FromProtein.Command.ShowBottomSheet)
     }
 

@@ -107,6 +107,7 @@
             android:id="@+id/layoutBoiling"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="@+id/layoutName"
             app:layout_constraintTop_toBottomOf="@id/layoutName">
 
@@ -157,6 +158,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
+            app:layout_goneMarginTop="30dp"
             android:textAppearance="@style/TextView.Normal"
             app:layout_constraintTop_toBottomOf="@+id/layoutBoiling"
             tools:text="Neon is a chemical element with symbol Ne and atomic number 10. It is in group 18 (noble gases) of the periodic table. Neon is a colorless, odorless, inert monatomic gas under standard conditions, with about two-thirds the density of air." />
