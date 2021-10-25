@@ -1,5 +1,6 @@
 package com.example.swiftyproteins.presentation.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,9 +22,7 @@ import com.example.swiftyproteins.presentation.viewmodels.ProteinViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.swiftyproteins.data.model.AtomsInfo
 import com.example.swiftyproteins.presentation.models.ModelAtomInfo
-
 
 class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinViewModel>() {
 
@@ -44,11 +43,18 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
         super.onViewCreated(view, savedInstanceState)
         initScene()
         initProtein()
+        setupView()
+    }
+
+    private fun setupView() {
         binding?.toolbar?.setNavigationOnClickListener {
             viewModel?.onBackClick()
         }
         binding?.bottomSheet?.bottomSheet?.let { bottomSheet ->
             bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        }
+        binding?.imgShare?.setOnClickListener {
+            viewModel?.onImageShareClick()
         }
     }
 
@@ -131,7 +137,17 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 showBottomSheet()
             is FromProtein.Command.HideBottomSheet ->
                 hideBottomSheet()
+            is FromProtein.Command.ShareScreen ->
+                shareScreen()
         }
+    }
+
+    private fun shareScreen() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.putExtra(Intent.EXTRA_TEXT, SHARE_MESSAGE)
+        intent.type = SHARE_INTENT_TYPE
+        startActivity(Intent.createChooser(intent, SHARE_CHOOSER_TITLE))
     }
 
     private fun showBottomSheet() {
@@ -193,6 +209,9 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
         ProteinViewModel::class.java
 
     companion object {
+        private const val SHARE_MESSAGE = "Hey Check out this Great app:"
+        private const val SHARE_INTENT_TYPE = "text/plain"
+        private const val SHARE_CHOOSER_TITLE = "Share To:"
         private const val ARG_PROTEIN_NAME = "protein_name"
 
         fun newInstance(proteinName: String) =

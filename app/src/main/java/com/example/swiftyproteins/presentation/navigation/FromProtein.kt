@@ -15,5 +15,7 @@ sealed class FromProtein : Action {
         object ShowBottomSheet: Command()
 
         object HideBottomSheet: Command()
+
+        object ShareScreen: Command()
     }
 }

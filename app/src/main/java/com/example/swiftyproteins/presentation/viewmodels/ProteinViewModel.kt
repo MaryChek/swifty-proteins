@@ -63,6 +63,9 @@ class ProteinViewModel(
         }
     }
 
+    fun onImageShareClick() =
+        handleAction(FromProtein.Command.ShareScreen)
+
     fun onNotFoundDialogCancelable() =
         onBackClick()
 

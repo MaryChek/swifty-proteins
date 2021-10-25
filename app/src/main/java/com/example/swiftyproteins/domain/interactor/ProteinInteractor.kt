@@ -41,7 +41,7 @@ class ProteinInteractor(
         val infoJsonString = fileInteractor.readAtomsInfo()
         val atomsInfo = Gson().fromJson(infoJsonString, AtomsInfo::class.java)
         return atomsInfo.elements.find { atomInfo ->
-            atomInfo.symbol == name
+            atomInfo.symbol.equals(name, true)
         }
     }
 }
