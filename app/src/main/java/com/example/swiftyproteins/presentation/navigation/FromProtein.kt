@@ -11,5 +11,9 @@ sealed class FromProtein : Action {
         class ShowNetworkErrorDialog(val error: ProteinError.NetworkError) : Command()
 
         class ShowNotFoundErrorDialog(val error: ProteinError.ProteinNotFound) : Command()
+
+        object ShowBottomSheet: Command()
+
+        object HideBottomSheet: Command()
     }
 }

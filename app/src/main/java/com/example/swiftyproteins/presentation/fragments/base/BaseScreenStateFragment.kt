@@ -1,5 +1,6 @@
 package com.example.swiftyproteins.presentation.fragments.base
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.Observer
 import com.example.swiftyproteins.presentation.models.ProteinError
 import com.example.swiftyproteins.presentation.models.State
@@ -10,6 +11,7 @@ abstract class BaseScreenStateFragment<
         ActionType : Action, Model : Any, ViewModel : BaseScreenStateViewModel<ActionType, Model>>
     : BaseFragment<ActionType, ViewModel>() {
 
+    @CallSuper
     override fun setupObserve() {
         super.setupObserve()
         viewModel?.apply {

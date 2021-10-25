@@ -18,11 +18,17 @@ import com.example.swiftyproteins.presentation.models.State
 import com.example.swiftyproteins.presentation.navigation.FromProtein
 import com.example.swiftyproteins.presentation.scene.SceneRender
 import com.example.swiftyproteins.presentation.viewmodels.ProteinViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.swiftyproteins.data.model.AtomsInfo
+
 
 class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinViewModel>() {
 
     private var binding: FragmentProteinViewBinding? = null
     private var sceneRender: SceneRender? = null
+    private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +46,17 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
         binding?.toolbar?.setNavigationOnClickListener {
             viewModel?.onBackClick()
         }
+        binding?.bottomSheet?.bottomSheet?.let { bottomSheet ->
+            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        }
+    }
+
+    override fun setupObserve() {
+        super.setupObserve()
+        viewModel?.atomInfo?.observe(viewLifecycleOwner, ::handleAtomInfo)
+    }
+
+    private fun handleAtomInfo(model: AtomsInfo.AtomInfo) {
     }
 
     private fun initScene() {
@@ -52,8 +69,6 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 }
                 .setDisplayMetrics(resources.displayMetrics)
         }
-//        binding?.sceneView?.scene?.camera?.farClipPlane = 100f
-//        binding?.sceneView?.scene?.camera?.worldPosition = Vector3(0f, 0f, 200f)
     }
 
     private fun initProtein() {
@@ -102,7 +117,22 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 showNotFoundDialog(action.error)
             is FromProtein.Command.ShowNetworkErrorDialog ->
                 showNetworkErrorDialog(action.error)
+            is FromProtein.Command.ShowBottomSheet ->
+                showBottomSheet()
+            is FromProtein.Command.HideBottomSheet ->
+                hideBottomSheet()
         }
+    }
+
+    private fun showBottomSheet() {
+        binding?.bottomSheet?.bottomSheet?.isVisible = true
+        binding?.root?.postDelayed({
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }, 500)
+    }
+
+    private fun hideBottomSheet() {
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun showNotFoundDialog(error: ProteinError) {

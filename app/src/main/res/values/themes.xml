@@ -11,7 +11,7 @@
     </style>
 
     <style name="CustomActionbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">?attr/colorPrimaryVariant</item>
+        <item name="colorControlNormal">?attr/colorSecondary</item>
         <item name="android:background">@color/transparent</item>
         <item name="android:textColorPrimary">@color/colorText</item>
         <item name="colorPrimary">@color/transparent</item>
@@ -37,6 +37,18 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/colorText</item>
         <item name="android:lineSpacingExtra">15dp</item>
+    </style>
+
+    <style name="TextView.Normal.Small.Primary" parent="TextView.Normal">
+        <item name="android:textSize">15sp</item>
+        <item name="android:spacing">0sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="TextView.Normal.Small" parent="TextView.Normal">
+        <item name="android:textSize">15sp</item>
+        <item name="android:spacing">0sp</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="TextView.Normal.Big.Primary" parent="TextView.Normal">

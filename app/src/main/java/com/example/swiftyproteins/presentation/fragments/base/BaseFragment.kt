@@ -2,6 +2,7 @@ package com.example.swiftyproteins.presentation.fragments.base
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -26,15 +27,16 @@ abstract class BaseFragment<ActionType : Action, ViewMode : BaseViewModel<Action
 
     abstract fun getViewModelClass(): Class<ViewMode>
 
+    @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupObserve()
     }
 
+    @CallSuper
     protected open fun setupObserve() {
         viewModel?.apply {
             actionUpdated.observe(viewLifecycleOwner, Observer(::handleAction))
-//            modelUpdated.observe(viewLifecycleOwner, Observer(::handleState))
         }
     }
 

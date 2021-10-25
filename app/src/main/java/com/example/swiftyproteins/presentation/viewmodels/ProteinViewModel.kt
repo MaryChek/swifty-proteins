@@ -1,15 +1,16 @@
 package com.example.swiftyproteins.presentation.viewmodels
 
+import androidx.lifecycle.MutableLiveData
 import com.example.swiftyproteins.data.model.AtomsInfo
 import com.example.swiftyproteins.data.model.ErrorType
 import com.example.swiftyproteins.domain.interactor.ProteinInteractor
-import com.example.swiftyproteins.presentation.logD
 import com.example.swiftyproteins.presentation.logE
 import com.example.swiftyproteins.presentation.mapper.ProteinMapper
 import com.example.swiftyproteins.presentation.models.Protein
 import com.example.swiftyproteins.presentation.models.ProteinError
 import com.example.swiftyproteins.presentation.models.State
 import com.example.swiftyproteins.presentation.navigation.FromProtein
+import com.example.swiftyproteins.presentation.view.controller.SingleEvent
 import com.example.swiftyproteins.presentation.viewmodels.base.BaseScreenStateViewModel
 import com.google.ar.sceneform.Node
 import java.lang.IllegalStateException
@@ -20,6 +21,7 @@ class ProteinViewModel(
 ) : BaseScreenStateViewModel<FromProtein, Protein>(Protein()) {
 
     private var proteinName: String? = null
+    var atomInfo: MutableLiveData<AtomsInfo.AtomInfo> = SingleEvent()
 
     private fun updateModel(atoms: Protein) {
         model = atoms
@@ -74,6 +76,7 @@ class ProteinViewModel(
 
     fun onNodeTouch(node: Node) {
         node.name?.let { name ->
+            handleAction(FromProtein.Command.HideBottomSheet)
             interactor.getAtomInfoByBaseName(mapper.mapAtomName(name))?.let { atomInfo ->
                 showAtomInfo(atomInfo)
             } ?: "information about $name not found"
@@ -81,7 +84,8 @@ class ProteinViewModel(
     }
 
     private fun showAtomInfo(atomInfo: AtomsInfo.AtomInfo) {
-        logD(atomInfo.toString())
+        this.atomInfo.value = atomInfo
+        handleAction(FromProtein.Command.ShowBottomSheet)
     }
 
     fun onBackClick() =

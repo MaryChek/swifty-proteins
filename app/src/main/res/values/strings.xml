@@ -9,4 +9,8 @@
     <string name="retry">Повторить</string>
     <string name="ok">Ок</string>
     <string name="loading">Загрузка...</string>
+    <string name="atom_name_title">Name: </string>
+    <string name="atom_mass_title">Atomic mass: </string>
+    <string name="atom_boiling_point_title">Boiling point:</string>
+    <string name="atom_melting_point_title">Melting point:</string>
 </resources>
