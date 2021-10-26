@@ -22,6 +22,7 @@ import com.example.swiftyproteins.presentation.viewmodels.ProteinViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.swiftyproteins.presentation.logD
 import com.example.swiftyproteins.presentation.models.ModelAtomInfo
 
 class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinViewModel>() {
@@ -47,6 +48,7 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
     }
 
     private fun setupView() {
+        logD("${binding?.toolbar?.toString()}")
         binding?.toolbar?.setNavigationOnClickListener {
             viewModel?.onBackClick()
         }

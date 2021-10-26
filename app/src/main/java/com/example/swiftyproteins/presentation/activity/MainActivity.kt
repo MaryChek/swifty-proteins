@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //TODO for debug
-        binding.root.postDelayed({ createRootFragment() }, 5000)
+        binding.root.postDelayed({ createRootFragment() }, 1000)
 
     }
 
