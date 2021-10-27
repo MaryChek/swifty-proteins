@@ -10,7 +10,7 @@ class LoginFragment: BaseFragment<FromLogin, LoginViewModel>() {
     override fun handleAction(action: FromLogin) {
         when (action) {
             is FromLogin.Navigate.ProteinList -> {
-//                router.navigateTo(Screens.ProteinList)
+                router.navigateTo(Screens.ProteinList)
             }
         }
     }

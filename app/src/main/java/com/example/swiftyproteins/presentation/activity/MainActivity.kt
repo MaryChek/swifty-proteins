@@ -6,10 +6,20 @@ import android.view.Menu
 import androidx.core.view.isVisible
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.ActivityMainBinding
-import com.example.swiftyproteins.presentation.fragments.ProteinListFragment
 import com.example.swiftyproteins.presentation.fragments.base.BaseFragment
+import com.example.swiftyproteins.presentation.navigation.Screens
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Router
+import com.github.terrakok.cicerone.androidx.AppNavigator
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
+
+    private val navigator by lazy {
+        AppNavigator(this, R.id.fragmentContainerView)
+    }
+    private val router by inject<Router>()
+    private val navigatorHolder by inject<NavigatorHolder>()
 
     private lateinit var binding: ActivityMainBinding
     private val currentFragment: BaseFragment<*, *>?
@@ -23,6 +33,20 @@ class MainActivity : AppCompatActivity() {
         binding.root.postDelayed({ createRootFragment() }, 1000)
     }
 
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        navigator.let {
+            navigatorHolder.setNavigator(it)
+        }
+    }
+
+    override fun onPause() {
+        navigator.let {
+            navigatorHolder.removeNavigator()
+        }
+        super.onPause()
+    }
+
     override fun onBackPressed() {
         when {
             currentFragment?.onBackPressed() == true -> Unit
@@ -32,13 +56,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun createRootFragment() {
         binding.tvLoading.isVisible = false
-
-        //TODO for debug
-        val fragment = ProteinListFragment()
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragmentContainerView, fragment)
-            .commit()
+        //TODO потом нужен будет экран Login
+        router.newRootScreen(Screens.ProteinList)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

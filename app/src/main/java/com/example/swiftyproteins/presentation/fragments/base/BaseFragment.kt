@@ -9,12 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.swiftyproteins.presentation.App
 import com.example.swiftyproteins.presentation.navigation.Action
 import com.example.swiftyproteins.presentation.viewmodels.base.BaseViewModel
+import com.github.terrakok.cicerone.Router
+import org.koin.android.ext.android.inject
 
 abstract class BaseFragment<ActionType : Action, ViewMode : BaseViewModel<ActionType>>
     : Fragment() {
-    // TODO нужно раскомментить, когда появится Koin
-    //    protected val router by inject<Router>()
 
+    protected val router by inject<Router>()
     open var viewModel: ViewMode? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

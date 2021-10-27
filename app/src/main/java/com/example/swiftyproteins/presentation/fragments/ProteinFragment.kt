@@ -132,13 +132,8 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
 
     override fun handleAction(action: FromProtein) {
         when (action) {
-            is FromProtein.Navigate.Back -> {
-                val fragment = ProteinListFragment()
-                (activity as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView, fragment)
-                    .commit()
-//                router.exit()
-            }
+            is FromProtein.Navigate.Back ->
+                router.exit()
             is FromProtein.Command.ShowNotFoundErrorDialog ->
                 showNotFoundDialog(action.error)
             is FromProtein.Command.ShowNetworkErrorDialog ->

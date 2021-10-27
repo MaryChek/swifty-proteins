@@ -10,6 +10,7 @@ import com.example.swiftyproteins.presentation.adapters.LigandListAdapter
 import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
 import com.example.swiftyproteins.presentation.hideKeyboard
 import com.example.swiftyproteins.presentation.navigation.FromProteinList
+import com.example.swiftyproteins.presentation.navigation.Screens
 import com.example.swiftyproteins.presentation.viewmodels.ProteinListViewModel
 
 class ProteinListFragment :
@@ -91,14 +92,8 @@ class ProteinListFragment :
 
     override fun handleAction(action: FromProteinList) {
         when (action) {
-            is FromProteinList.Navigate.Protein -> {
-                //TODO remove and uncomment router
-                val fragment = ProteinFragment.newInstance(action.proteinName)
-                (activity as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView, fragment)
-                    .commit()
-//                router.navigateTo(action.proteinName)
-            }
+            is FromProteinList.Navigate.Protein ->
+                router.navigateTo(Screens.Protein(action.proteinName))
         }
     }
 
