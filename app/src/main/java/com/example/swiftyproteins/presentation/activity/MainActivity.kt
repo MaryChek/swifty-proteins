@@ -7,10 +7,13 @@ import androidx.core.view.isVisible
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.ActivityMainBinding
 import com.example.swiftyproteins.presentation.fragments.ProteinListFragment
+import com.example.swiftyproteins.presentation.fragments.base.BaseFragment
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val currentFragment: BaseFragment<*, *>?
+        get() = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as? BaseFragment<*, *>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +21,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.tvLoading.isVisible = true
         binding.root.postDelayed({ createRootFragment() }, 1000)
+    }
+
+    override fun onBackPressed() {
+        when {
+            currentFragment?.onBackPressed() == true -> Unit
+            else -> super.onBackPressed()
+        }
     }
 
     private fun createRootFragment() {
