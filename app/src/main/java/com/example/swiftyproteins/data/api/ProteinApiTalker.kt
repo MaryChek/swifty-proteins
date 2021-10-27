@@ -20,7 +20,10 @@ class ProteinApiTalker(
                 when (errorCode) {
                     NETWORK_ERROR_CODE -> onError(ErrorType.Network)
                     NOT_FOUND_ERROR_CODE -> onError(ErrorType.NotFound)
-                    else -> logD(errorMessage)
+                    else -> {
+                        onError(ErrorType.Unknown)
+                        logE(errorMessage)
+                    }
                 }
             }
         )

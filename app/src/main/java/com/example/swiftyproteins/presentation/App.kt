@@ -11,7 +11,6 @@ import com.example.swiftyproteins.domain.mapper.ProteinMapper as DomainProteinMa
 import okhttp3.OkHttpClient
 
 class App: Application() {
-//    lateinit var interactor: ProteinInteractor
     lateinit var viewModelFactory: PokemonViewModelFactory
 
     override fun onCreate() {

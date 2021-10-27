@@ -9,7 +9,7 @@ sealed class FromProtein : Action {
     }
 
     sealed class Command : FromProtein() {
-        class ShowNetworkErrorDialog(val error: ProteinError.NetworkError) : Command()
+        class ShowNetworkErrorDialog(val error: ProteinError) : Command()
 
         class ShowNotFoundErrorDialog(val error: ProteinError.ProteinNotFound) : Command()
 

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.swiftyproteins.data.model.AtomsInfo
 import com.example.swiftyproteins.data.model.ErrorType
 import com.example.swiftyproteins.domain.interactor.ProteinInteractor
-import com.example.swiftyproteins.presentation.fragments.ProteinFragment
 import com.example.swiftyproteins.presentation.logE
 import com.example.swiftyproteins.presentation.mapper.ProteinMapper
 import com.example.swiftyproteins.presentation.models.ModelAtomInfo
@@ -64,6 +63,11 @@ class ProteinViewModel(
             ErrorType.Network -> handleAction(
                 FromProtein.Command.ShowNetworkErrorDialog(
                     ProteinError.NetworkError
+                )
+            )
+            ErrorType.Unknown -> handleAction(
+                FromProtein.Command.ShowNetworkErrorDialog(
+                    ProteinError.NetworkError as ProteinError
                 )
             )
         }

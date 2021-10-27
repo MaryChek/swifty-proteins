@@ -45,7 +45,7 @@ class SceneRender {
         override fun onScaleEnd(detector: ScaleGestureDetector) {}
     }
 
-    fun getCurrentScene() : SceneView? =
+    fun getCurrentScene(): SceneView? =
         sceneView
 
     fun initSceneView(scene: SceneView): SceneRender {
@@ -101,7 +101,7 @@ class SceneRender {
         }
     }
 
-    private fun createRootNode(){
+    private fun createRootNode() {
         rootNode = Node()
         rootNode?.name = ROOT_NODE_NAME
         rootNode?.worldPosition = ROOT_NODE_POSITION

@@ -4,7 +4,6 @@ import com.example.swiftyproteins.data.api.ProteinApiTalker
 import com.example.swiftyproteins.data.mapper.ProteinMapper
 import com.example.swiftyproteins.data.model.ErrorType
 import com.example.swiftyproteins.domain.models.Atom
-import com.example.swiftyproteins.presentation.logE
 import okhttp3.ResponseBody
 import java.io.BufferedReader
 import java.io.InputStream

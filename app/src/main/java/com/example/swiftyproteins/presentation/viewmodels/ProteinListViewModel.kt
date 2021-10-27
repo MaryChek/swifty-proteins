@@ -1,6 +1,5 @@
 package com.example.swiftyproteins.presentation.viewmodels
 
-import com.example.swiftyproteins.R
 import com.example.swiftyproteins.domain.interactor.ProteinInteractor
 import com.example.swiftyproteins.presentation.navigation.FromProteinList
 import com.example.swiftyproteins.presentation.viewmodels.base.BaseScreenStateViewModel

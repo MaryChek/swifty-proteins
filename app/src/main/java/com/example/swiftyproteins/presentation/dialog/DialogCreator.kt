@@ -12,7 +12,7 @@ class DialogCreator {
         onRetryClick: () -> Unit
     ): CommonDialog =
         CommonDialog()
-            .setMessage(error.getTitleResId())
+            .setTitle(context.getString(error.getTitleResId()))
             .setMessage(error.getErrorMessageResId())
             .setNegativeButtonTitle(R.string.cancel)
             .setPositiveButtonTitle(R.string.retry)
@@ -26,7 +26,7 @@ class DialogCreator {
         onButtonClick: () -> Unit
     ): CommonDialog =
         CommonDialog()
-            .setMessage(error.getTitleResId())
+            .setTitle(context.getString(error.getTitleResId()))
             .setMessage(error.getErrorMessageResId())
             .setPositiveButtonTitle(R.string.ok)
             .setFunctionOnPositive(onButtonClick)

@@ -57,7 +57,6 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
     }
 
     private fun setupView() {
-        logD("${binding?.toolbar?.toString()}")
         binding?.toolbar?.setNavigationOnClickListener {
             viewModel?.onBackClick()
         }

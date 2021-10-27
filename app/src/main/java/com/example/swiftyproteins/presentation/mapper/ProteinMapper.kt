@@ -18,7 +18,6 @@ class ProteinMapper {
         ligand.mapIndexed { index, atom ->
             if (isAtomHVisible || (!isAtomHVisible && atom.base != DomainAtom.BaseAtom.H)) {
                 val coordinateAtom: Vector3 = atom.coordinate.toVec3()
-
                 atoms.add(
                     Atom(
                         ("${atom.base.name}_${atom.name}"),
@@ -94,7 +93,7 @@ class ProteinMapper {
         connections: List<String>,
         currentAtomIndex: Int,
         ligand: List<DomainAtom>,
-        isAtomHVisible: Boolean
+        isAtomHVisible: Boolean,
     ): List<AtomConnection> =
         connections.mapNotNull { atomId ->
             if (atomId.toInt() > currentAtomIndex.minus((1))) {

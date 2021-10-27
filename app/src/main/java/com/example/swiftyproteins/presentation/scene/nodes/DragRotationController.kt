@@ -1,6 +1,7 @@
 package com.example.swiftyproteins.presentation.scene.nodes
 
 import android.os.Handler
+import android.os.Looper
 import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
@@ -32,7 +33,7 @@ class DragRotationController(
 
     override fun onActivated(node: Node?) {
         super.onActivated(node)
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             transformCamera(lat, long)
         }, 0)
     }
@@ -60,9 +61,6 @@ class DragRotationController(
         camera?.localRotation = rot
         camera?.localPosition = pos
     }
-
-    fun resetInitialState() =
-        transformCamera(initialLat, initialLong)
 
     public override fun onEndTransformation(gesture: DragGesture) {}
 

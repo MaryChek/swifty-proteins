@@ -1,9 +1,7 @@
 package com.example.swiftyproteins.presentation.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinListBinding
@@ -57,6 +55,7 @@ class ProteinListFragment :
         val item: MenuItem = menu.findItem(R.id.app_bar_search)
         searchView = item.actionView as SearchView
         searchView.setBackgroundResource(R.drawable.search_back)
+        searchView.queryHint = getString(R.string.hint_search_ligand)
         initOnChangeSearchTextListener()
         return super.onCreateOptionsMenu(menu, inflater)
     }

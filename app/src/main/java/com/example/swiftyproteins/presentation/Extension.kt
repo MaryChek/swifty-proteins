@@ -10,8 +10,6 @@ import android.util.Log
 import android.view.PixelCopy
 import android.view.SurfaceView
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
 import androidx.fragment.app.Fragment
 import com.example.swiftyproteins.domain.models.Atom
