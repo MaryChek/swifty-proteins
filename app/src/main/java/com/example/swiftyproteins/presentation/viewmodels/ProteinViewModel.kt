@@ -1,9 +1,11 @@
 package com.example.swiftyproteins.presentation.viewmodels
 
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import com.example.swiftyproteins.data.model.AtomsInfo
 import com.example.swiftyproteins.data.model.ErrorType
 import com.example.swiftyproteins.domain.interactor.ProteinInteractor
+import com.example.swiftyproteins.presentation.fragments.ProteinFragment
 import com.example.swiftyproteins.presentation.logE
 import com.example.swiftyproteins.presentation.mapper.ProteinMapper
 import com.example.swiftyproteins.presentation.models.ModelAtomInfo
@@ -11,9 +13,12 @@ import com.example.swiftyproteins.presentation.models.Protein
 import com.example.swiftyproteins.presentation.models.ProteinError
 import com.example.swiftyproteins.presentation.models.State
 import com.example.swiftyproteins.presentation.navigation.FromProtein
+import com.example.swiftyproteins.presentation.overlayToCenter
 import com.example.swiftyproteins.presentation.view.controller.SingleEvent
 import com.example.swiftyproteins.presentation.viewmodels.base.BaseScreenStateViewModel
 import com.google.ar.sceneform.Node
+import eu.bolt.screenshotty.Screenshot
+import eu.bolt.screenshotty.ScreenshotBitmap
 import java.lang.IllegalStateException
 
 class ProteinViewModel(
@@ -22,6 +27,7 @@ class ProteinViewModel(
 ) : BaseScreenStateViewModel<FromProtein, Protein>(Protein()) {
 
     private var proteinName: String? = null
+    private var sceneBitmap: Bitmap? = null
     var modelAtomInfo: MutableLiveData<ModelAtomInfo> = SingleEvent()
 
     private fun updateModel(atoms: Protein) {
@@ -64,7 +70,24 @@ class ProteinViewModel(
     }
 
     fun onImageShareClick() =
-        handleAction(FromProtein.Command.ShareScreen)
+        handleAction(FromProtein.Command.MakeSceneScreenBitmap)
+
+    fun onSceneBitmapReady(bitmap: Bitmap) {
+        sceneBitmap = bitmap
+        handleAction(FromProtein.Command.MakeUiScreenBitmap)
+    }
+
+    fun onUiScreenReady(screenshot: Screenshot) {
+        val bitmapUi: Bitmap =
+            when (screenshot) {
+                is ScreenshotBitmap -> screenshot.bitmap
+            }
+
+        sceneBitmap?.overlayToCenter(bitmapUi)?.let { bitmap ->
+            val uri = interactor.saveBitmapToCache(bitmap)
+            handleAction(FromProtein.Command.ShareScreenByUri(uri))
+        } ?: logE("scene screenshot missing")
+    }
 
     fun onNotFoundDialogCancelable() =
         onBackClick()

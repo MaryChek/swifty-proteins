@@ -45,6 +45,8 @@ class SceneRender {
         override fun onScaleEnd(detector: ScaleGestureDetector) {}
     }
 
+    fun getCurrentScene() : SceneView? =
+        sceneView
 
     fun initSceneView(scene: SceneView): SceneRender {
         sceneView = scene

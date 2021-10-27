@@ -2,16 +2,12 @@ package com.example.swiftyproteins.presentation.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinViewBinding
 import com.example.swiftyproteins.presentation.activity.MainActivity
 import com.example.swiftyproteins.presentation.dialog.DialogCreator
-import com.example.swiftyproteins.presentation.getColor
 import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
 import com.example.swiftyproteins.presentation.models.Protein
 import com.example.swiftyproteins.presentation.models.ProteinError
@@ -20,16 +16,25 @@ import com.example.swiftyproteins.presentation.navigation.FromProtein
 import com.example.swiftyproteins.presentation.scene.SceneRender
 import com.example.swiftyproteins.presentation.viewmodels.ProteinViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.swiftyproteins.presentation.logD
 import com.example.swiftyproteins.presentation.models.ModelAtomInfo
+import android.net.Uri
+import android.view.*
+import com.example.swiftyproteins.presentation.*
+import eu.bolt.screenshotty.*
 
 class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinViewModel>() {
 
     private var binding: FragmentProteinViewBinding? = null
     private var sceneRender: SceneRender? = null
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
+
+    private val screenshotManager by lazy {
+        ScreenshotManagerBuilder(requireActivity())
+            .withPermissionRequestCode(REQUEST_SCREENSHOT_PERMISSION)
+            .withCustomActionOrder(ScreenshotActionOrder.pixelCopyFirst())
+            .build()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +50,10 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
         initScene()
         initProtein()
         setupView()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        screenshotManager.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun setupView() {
@@ -139,17 +148,36 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 showBottomSheet()
             is FromProtein.Command.HideBottomSheet ->
                 hideBottomSheet()
-            is FromProtein.Command.ShareScreen ->
-                shareScreen()
+            is FromProtein.Command.MakeSceneScreenBitmap ->
+                makeSceneScreenBitmap()
+            is FromProtein.Command.MakeUiScreenBitmap ->
+                makeUiScreenBitmap()
+            is FromProtein.Command.ShareScreenByUri ->
+                shareImage(action.uri)
         }
     }
 
-    private fun shareScreen() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.putExtra(Intent.EXTRA_TEXT, SHARE_MESSAGE)
-        intent.type = SHARE_INTENT_TYPE
-        startActivity(Intent.createChooser(intent, SHARE_CHOOSER_TITLE))
+    private fun makeSceneScreenBitmap() {
+        sceneRender?.getCurrentScene()?.let { sceneView ->
+            getBitmapFromView(sceneView) { bitmap ->
+                viewModel?.onSceneBitmapReady(bitmap)
+            }
+        }
+    }
+
+    private fun makeUiScreenBitmap() {
+        screenshotManager.makeScreenshot().observe(
+            onSuccess = { screenshot ->
+                viewModel?.onUiScreenReady(screenshot)
+            },
+            onError = { t ->
+                logE(t.message, t as Exception)
+            }
+        )
+    }
+
+    private fun shareImage(uri: Uri) {
+        ChooserShareScreen.start(this, uri)
     }
 
     private fun showBottomSheet() {
@@ -211,9 +239,7 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
         ProteinViewModel::class.java
 
     companion object {
-        private const val SHARE_MESSAGE = "Hey Check out this Great app:"
-        private const val SHARE_INTENT_TYPE = "text/plain"
-        private const val SHARE_CHOOSER_TITLE = "Share To:"
+        private const val REQUEST_SCREENSHOT_PERMISSION = 888
         private const val ARG_PROTEIN_NAME = "protein_name"
 
         fun newInstance(proteinName: String) =

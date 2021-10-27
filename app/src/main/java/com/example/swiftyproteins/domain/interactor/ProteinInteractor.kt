@@ -1,5 +1,7 @@
 package com.example.swiftyproteins.domain.interactor
 
+import android.graphics.Bitmap
+import android.net.Uri
 import com.example.swiftyproteins.data.model.AtomsInfo
 import com.example.swiftyproteins.data.model.ErrorType
 import com.example.swiftyproteins.data.repository.ProteinsRepository
@@ -42,6 +44,21 @@ class ProteinInteractor(
         val atomsInfo = Gson().fromJson(infoJsonString, AtomsInfo::class.java)
         return atomsInfo.elements.find { atomInfo ->
             atomInfo.symbol.equals(name, true)
+        }
+    }
+
+    fun saveBitmapToCache(bitmap: Bitmap): Uri {
+        val fileName = "Img_${StringRandomizer.getRandomString()}.jpg"
+        return fileInteractor.saveToCacheAndGetUri(bitmap, fileName)
+    }
+
+    object StringRandomizer {
+
+        fun getRandomString(): String {
+            val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+            return (1..16)
+                .map { allowedChars.random() }
+                .joinToString("")
         }
     }
 }

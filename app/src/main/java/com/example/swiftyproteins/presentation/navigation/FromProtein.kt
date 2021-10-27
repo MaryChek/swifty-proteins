@@ -1,5 +1,6 @@
 package com.example.swiftyproteins.presentation.navigation
 
+import android.net.Uri
 import com.example.swiftyproteins.presentation.models.ProteinError
 
 sealed class FromProtein : Action {
@@ -16,6 +17,10 @@ sealed class FromProtein : Action {
 
         object HideBottomSheet: Command()
 
-        object ShareScreen: Command()
+        object MakeSceneScreenBitmap: Command()
+
+        object MakeUiScreenBitmap: Command()
+
+        class ShareScreenByUri(val uri: Uri): Command()
     }
 }

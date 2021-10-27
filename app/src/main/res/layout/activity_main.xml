@@ -18,6 +18,7 @@
         app:srcCompat="@drawable/app_background" />
 
     <TextView
+        android:id="@+id/tvLoading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

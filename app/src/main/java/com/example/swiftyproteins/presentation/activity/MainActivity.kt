@@ -2,13 +2,11 @@ package com.example.swiftyproteins.presentation.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.Menu
-import android.view.View
+import androidx.core.view.isVisible
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.ActivityMainBinding
 import com.example.swiftyproteins.presentation.fragments.ProteinListFragment
-import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,13 +16,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        //TODO for debug
+        binding.tvLoading.isVisible = true
         binding.root.postDelayed({ createRootFragment() }, 1000)
-
     }
 
     private fun createRootFragment() {
+        binding.tvLoading.isVisible = false
+
+        //TODO for debug
         val fragment = ProteinListFragment()
         supportFragmentManager
             .beginTransaction()

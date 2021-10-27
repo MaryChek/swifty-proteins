@@ -1,11 +1,12 @@
 package com.example.swiftyproteins.domain.interactor
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import androidx.annotation.RawRes
+import androidx.core.content.FileProvider
 import com.example.swiftyproteins.R
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
+import java.io.*
 
 class FileInteractor(private val context: Context) {
 
@@ -38,4 +39,34 @@ class FileInteractor(private val context: Context) {
         }
         return jsonStringBuilder.toString()
     }
+
+    fun saveToCacheAndGetUri(bitmap: Bitmap, fileName: String): Uri {
+        val file: File = saveToCache(bitmap, fileName)
+        return FileProvider.getUriForFile(
+            context,
+            context.applicationContext.packageName + ".provider",
+            file
+        )
+    }
+
+    private fun saveToCache(bitmap: Bitmap, fileName: String): File {
+        var fos: FileOutputStream? = null
+        val outputStream = ByteArrayOutputStream()
+        try {
+            val file = getPrivateCacheFileObject(fileName)
+            file.createNewFile()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            val bitmapData = outputStream.toByteArray()
+            fos = FileOutputStream(file)
+            fos.write(bitmapData)
+            fos.flush()
+            return file
+        } finally {
+            fos?.close()
+            outputStream.close()
+        }
+    }
+
+    private fun getPrivateCacheFileObject(name: String): File =
+        File(context.cacheDir, name)
 }

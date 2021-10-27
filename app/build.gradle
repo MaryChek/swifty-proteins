@@ -60,6 +60,9 @@ dependencies {
     //Gson
     implementation 'com.google.code.gson:gson:2.8.8'
 
+    //Screenshot
+    implementation 'eu.bolt:screenshotty:1.0.4'
+
     //Test
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
