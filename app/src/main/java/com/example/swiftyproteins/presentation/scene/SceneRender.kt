@@ -76,6 +76,7 @@ class SceneRender {
                     val children: List<Node> = ArrayList(node.children)
                     for (child in children) {
                         if (child !is Camera && child !is Sun) {
+                            node.removeChild(child)
                             child.setParent(null)
                         }
                     }

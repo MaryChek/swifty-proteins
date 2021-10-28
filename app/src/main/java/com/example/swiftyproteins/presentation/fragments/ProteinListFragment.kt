@@ -3,18 +3,20 @@ package com.example.swiftyproteins.presentation.fragments
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinListBinding
 import com.example.swiftyproteins.presentation.activity.MainActivity
 import com.example.swiftyproteins.presentation.adapters.LigandListAdapter
 import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
 import com.example.swiftyproteins.presentation.hideKeyboard
+import com.example.swiftyproteins.presentation.models.ProteinListStateScreen
 import com.example.swiftyproteins.presentation.navigation.FromProteinList
 import com.example.swiftyproteins.presentation.navigation.Screens
 import com.example.swiftyproteins.presentation.viewmodels.ProteinListViewModel
 
 class ProteinListFragment :
-    BaseScreenStateFragment<FromProteinList, List<String>, ProteinListViewModel>() {
+    BaseScreenStateFragment<FromProteinList, ProteinListStateScreen, ProteinListViewModel>() {
 
     private var binding: FragmentProteinListBinding? = null
     private var adapter: LigandListAdapter? = null
@@ -85,22 +87,27 @@ class ProteinListFragment :
         binding?.rvLigands?.adapter = adapter
     }
 
-    override fun handleModel(model: List<String>) {
-        adapter?.submitList(model)
-        binding?.rvLigands?.smoothScrollToPosition(RV_SCROLL_POSITION)
+    override fun handleModel(model: ProteinListStateScreen) {
+        adapter?.submitList(model.proteins)
+        binding?.rvLigands?.smoothScrollToPosition(model.scrollPosition)
     }
 
     override fun handleAction(action: FromProteinList) {
         when (action) {
             is FromProteinList.Navigate.Protein ->
                 router.navigateTo(Screens.Protein(action.proteinName))
+            is FromProteinList.Command.GetFirstVisibleItem ->
+                getFirstVisibleItem()
         }
+    }
+
+    private fun getFirstVisibleItem() {
+        (binding?.rvLigands?.layoutManager as LinearLayoutManager?)
+            ?.findFirstVisibleItemPosition()?.let { position ->
+                viewModel?.onGetFirstItemPosition(position)
+            }
     }
 
     override fun getViewModelClass() =
         ProteinListViewModel::class.java
-
-    companion object {
-        private const val RV_SCROLL_POSITION = 0
-    }
 }

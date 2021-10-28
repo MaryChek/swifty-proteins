@@ -4,4 +4,8 @@ sealed class FromProteinList: Action {
     sealed class Navigate: FromProteinList() {
         class Protein(val proteinName: String): Navigate()
     }
+
+    sealed class Command: FromProteinList() {
+        object GetFirstVisibleItem: Command()
+    }
 }
