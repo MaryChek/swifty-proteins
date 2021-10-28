@@ -6,7 +6,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.example.swiftyproteins.R
 import com.example.swiftyproteins.databinding.FragmentProteinViewBinding
-import com.example.swiftyproteins.presentation.activity.MainActivity
 import com.example.swiftyproteins.presentation.dialog.DialogCreator
 import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
 import com.example.swiftyproteins.presentation.models.Protein
@@ -54,6 +53,7 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         screenshotManager.onActivityResult(requestCode, resultCode, data)
+        sceneRender
     }
 
     private fun setupView() {
@@ -65,6 +65,9 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
         }
         binding?.imgShare?.setOnClickListener {
             viewModel?.onImageShareClick()
+        }
+        binding?.imgHydrogen?.setOnClickListener { img ->
+            viewModel?.onImageHydrogenClick(img.isActivated)
         }
     }
 
@@ -148,6 +151,10 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
                 makeUiScreenBitmap()
             is FromProtein.Command.ShareScreenByUri ->
                 shareImage(action.uri)
+            is FromProtein.Command.ChangeImageHydrogenActivate ->
+                binding?.imgHydrogen?.isActivated = action.isActivated
+            is FromProtein.Command.ClearScene ->
+                sceneRender?.cleanScene()
         }
     }
 

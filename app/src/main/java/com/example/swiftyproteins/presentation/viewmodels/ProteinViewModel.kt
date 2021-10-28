@@ -39,11 +39,11 @@ class ProteinViewModel(
         getProteins(proteinName)
     }
 
-    private fun getProteins(proteinName: String) {
+    private fun getProteins(proteinName: String, isHyAtomsVisible: Boolean = false) {
         handleState(State.Loading)
         interactor.getProteinByName(proteinName,
             onSuccess = { ligand ->
-                val atoms = mapper.map(ligand)
+                val atoms = mapper.map(ligand, isHyAtomsVisible)
                 handleState(State.Success)
                 updateModel(atoms)
             },
@@ -75,6 +75,14 @@ class ProteinViewModel(
 
     fun onImageShareClick() =
         handleAction(FromProtein.Command.MakeSceneScreenBitmap)
+
+    fun onImageHydrogenClick(isActivated: Boolean) {
+        proteinName?.let { name ->
+            handleAction(FromProtein.Command.ChangeImageHydrogenActivate(!isActivated))
+            handleAction(FromProtein.Command.ClearScene)
+            getProteins(name, !isActivated)
+        }
+    }
 
     fun onSceneBitmapReady(bitmap: Bitmap) {
         sceneBitmap = bitmap

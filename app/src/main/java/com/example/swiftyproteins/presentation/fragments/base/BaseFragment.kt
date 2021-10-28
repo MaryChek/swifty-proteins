@@ -26,10 +26,8 @@ abstract class BaseFragment<ActionType : Action, ViewMode : BaseViewModel<Action
         viewModel = viewModelProvider.get(getViewModelClass())
     }
 
-    fun onBackPressed(): Boolean {
-//        router.exit()
-        return true
-    }
+    fun onBackPressed(): Boolean =
+        false
 
     abstract fun getViewModelClass(): Class<ViewMode>
 

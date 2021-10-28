@@ -4,8 +4,6 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.util.DisplayMetrics
 import com.example.swiftyproteins.presentation.scene.nodes.DragTransformableNode
-import com.google.ar.sceneform.Node
-import com.google.ar.sceneform.SceneView
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.*
@@ -14,6 +12,7 @@ import com.google.ar.sceneform.ux.TransformationSystem
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.OnScaleGestureListener
 import com.example.swiftyproteins.presentation.logD
+import com.google.ar.sceneform.*
 
 class SceneRender {
     private var sceneView: SceneView? = null
@@ -68,6 +67,21 @@ class SceneRender {
     fun setDisplayMetrics(metrics: DisplayMetrics): SceneRender {
         transformationSystem = makeTransformationSystem(metrics)
         return this
+    }
+
+    fun cleanScene() {
+        sceneView?.scene?.let { scene ->
+            scene.children.forEach { node ->
+                if (node.name == ROOT_NODE_NAME) {
+                    val children: List<Node> = ArrayList(node.children)
+                    for (child in children) {
+                        if (child !is Camera && child !is Sun) {
+                            child.setParent(null)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun makeTransformationSystem(metrics: DisplayMetrics): TransformationSystem {

@@ -22,5 +22,9 @@ sealed class FromProtein : Action {
         object MakeUiScreenBitmap: Command()
 
         class ShareScreenByUri(val uri: Uri): Command()
+
+        class ChangeImageHydrogenActivate(val isActivated: Boolean): Command()
+
+        object ClearScene: Command()
     }
 }
