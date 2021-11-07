@@ -12,24 +12,24 @@ import com.example.swiftyproteins.presentation.viewmodels.base.BaseViewModel
 import com.github.terrakok.cicerone.Router
 import org.koin.android.ext.android.inject
 
-abstract class BaseFragment<ActionType : Action, ViewMode : BaseViewModel<ActionType>>
+abstract class BaseFragment<ActionType : Action, ViewModel : BaseViewModel<ActionType>>
     : Fragment() {
 
     protected val router by inject<Router>()
-    open var viewModel: ViewMode? = null
+    open val viewModel: ViewModel? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val app: App = (requireActivity().applicationContext as App)
-        val viewModelFactory = app.viewModelFactory
-        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
-        viewModel = viewModelProvider.get(getViewModelClass())
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        val app: App = (requireActivity().applicationContext as App)
+//        val viewModelFactory = app.viewModelFactory
+//        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
+//        viewModel = viewModelProvider.get(getViewModelClass())
+//    }
 
     fun onBackPressed(): Boolean =
         false
 
-    abstract fun getViewModelClass(): Class<ViewMode>
+//    abstract fun getViewModelClass(): Class<ViewMode>
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -21,12 +21,21 @@ import android.net.Uri
 import android.view.*
 import com.example.swiftyproteins.presentation.*
 import eu.bolt.screenshotty.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinViewModel>() {
 
     private var binding: FragmentProteinViewBinding? = null
     private var sceneRender: SceneRender? = null
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
+
+    private val proteinName: String? by lazy {
+        arguments?.getString(ARG_PROTEIN_NAME)
+    }
+    override val viewModel: ProteinViewModel by viewModel {
+        parametersOf(proteinName)
+    }
 
     private val screenshotManager by lazy {
         ScreenshotManagerBuilder(requireActivity())
@@ -47,7 +56,7 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initScene()
-        initProtein()
+        binding?.toolbar?.title = proteinName
         setupView()
     }
 
@@ -58,22 +67,22 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
 
     private fun setupView() {
         binding?.toolbar?.setNavigationOnClickListener {
-            viewModel?.onBackClick()
+            viewModel.onBackClick()
         }
         binding?.bottomSheet?.bottomSheet?.let { bottomSheet ->
             bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         }
         binding?.imgShare?.setOnClickListener {
-            viewModel?.onImageShareClick()
+            viewModel.onImageShareClick()
         }
         binding?.imgHydrogen?.setOnClickListener { img ->
-            viewModel?.onImageHydrogenClick(img.isActivated)
+            viewModel.onImageHydrogenClick(img.isActivated)
         }
     }
 
     override fun setupObserve() {
         super.setupObserve()
-        viewModel?.modelAtomInfo?.observe(viewLifecycleOwner, ::handleAtomInfo)
+        viewModel.modelAtomInfo.observe(viewLifecycleOwner, ::handleAtomInfo)
     }
 
     private fun handleAtomInfo(model: ModelAtomInfo) {
@@ -93,24 +102,9 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
             sceneRender = SceneRender()
                 .initSceneView(sceneView)
                 .setBackground(getColor(R.color.color_background_scene))
-                .setOnNodeTouchListener(requireContext()) { node ->
-                    viewModel?.onNodeTouch(node)
-                }
+                .setOnNodeTouchListener(requireContext(), viewModel::onNodeTouch)
                 .setDisplayMetrics(resources.displayMetrics)
         }
-    }
-
-    private fun initProtein() {
-        //Todo remove and get argument on init
-        val proteinName: String? = arguments?.getString(ARG_PROTEIN_NAME)
-        proteinName?.let {
-            viewModel?.onViewCreated(proteinName)
-            setupToolbarTitle(proteinName)
-        }
-    }
-
-    private fun setupToolbarTitle(proteinName: String) {
-        binding?.toolbar?.title = proteinName
     }
 
     override fun handleModel(model: Protein) {
@@ -160,17 +154,13 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
 
     private fun makeSceneScreenBitmap() {
         sceneRender?.getCurrentScene()?.let { sceneView ->
-            getBitmapFromView(sceneView) { bitmap ->
-                viewModel?.onSceneBitmapReady(bitmap)
-            }
+            getBitmapFromView(sceneView, viewModel::onSceneBitmapReady)
         }
     }
 
     private fun makeUiScreenBitmap() {
         screenshotManager.makeScreenshot().observe(
-            onSuccess = { screenshot ->
-                viewModel?.onUiScreenReady(screenshot)
-            },
+            onSuccess = viewModel::onUiScreenReady,
             onError = { t ->
                 logE(t.message, t as Exception)
             }
@@ -193,24 +183,20 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
     }
 
     private fun showNotFoundDialog(error: ProteinError) {
-        viewModel?.let { vm ->
-            DialogCreator().showNotFoundErrorDialog(
-                requireContext(),
-                error,
-                vm::onNotFoundDialogCancelable
-            )
-        }
+        DialogCreator().showNotFoundErrorDialog(
+            requireContext(),
+            error,
+            viewModel::onNotFoundDialogCancelable
+        )
     }
 
     private fun showNetworkErrorDialog(error: ProteinError) {
-        viewModel?.let { vm ->
-            DialogCreator().showNetworkErrorDialog(
-                requireContext(),
-                error,
-                vm::onNetworkErrorDialogCancelable,
-                vm::onNetworkErrorDialogRetryClick
-            )
-        }
+        DialogCreator().showNetworkErrorDialog(
+            requireContext(),
+            error,
+            viewModel::onNetworkErrorDialogCancelable,
+            viewModel::onNetworkErrorDialogRetryClick
+        )
     }
 
     override fun handleState(state: State) {
@@ -235,9 +221,6 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
         sceneRender?.onDestroy()
         binding = null
     }
-
-    override fun getViewModelClass(): Class<ProteinViewModel> =
-        ProteinViewModel::class.java
 
     companion object {
         private const val REQUEST_SCREENSHOT_PERMISSION = 888

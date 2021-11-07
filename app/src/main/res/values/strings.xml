@@ -14,4 +14,6 @@
     <string name="atom_boiling_point_title">Boiling point:</string>
     <string name="atom_melting_point_title">Melting point:</string>
     <string name="degree_celsius">%1$s ℃</string>
+    <string name="auth_error_message">Auth error, please try again</string>
+    <string name="auth">login</string>
 </resources>

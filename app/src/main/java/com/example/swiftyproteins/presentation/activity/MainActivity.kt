@@ -56,8 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createRootFragment() {
         binding.tvLoading.isVisible = false
-        //TODO потом нужен будет экран Login
-        router.newRootScreen(Screens.ProteinList)
+        router.newRootScreen(Screens.Login)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

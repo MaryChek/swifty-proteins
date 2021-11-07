@@ -25,7 +25,7 @@ class CommonDialog {
         return this
     }
 
-    fun setFunctionOnNegative(function: () -> Unit): CommonDialog {
+    fun setFunctionOnNegative(function: (() -> Unit)?): CommonDialog {
         functionAfterNegativeClick = function
         return this
     }

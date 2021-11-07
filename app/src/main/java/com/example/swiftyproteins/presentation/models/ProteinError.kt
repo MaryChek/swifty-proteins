@@ -13,6 +13,11 @@ sealed class ProteinError {
             R.string.missing_protein_error_message
     }
 
+    object AuthError: ProteinError() {
+        override fun getErrorMessageResId(): Int =
+            R.string.auth_error_message
+    }
+
     open fun getErrorMessageResId():Int =
         R.string.unknown_error
 

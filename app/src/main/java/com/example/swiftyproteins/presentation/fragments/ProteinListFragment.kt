@@ -14,12 +14,14 @@ import com.example.swiftyproteins.presentation.models.ProteinListStateScreen
 import com.example.swiftyproteins.presentation.navigation.FromProteinList
 import com.example.swiftyproteins.presentation.navigation.Screens
 import com.example.swiftyproteins.presentation.viewmodels.ProteinListViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProteinListFragment :
     BaseScreenStateFragment<FromProteinList, ProteinListStateScreen, ProteinListViewModel>() {
 
     private var binding: FragmentProteinListBinding? = null
     private var adapter: LigandListAdapter? = null
+    override val viewModel: ProteinListViewModel by viewModel()
     private lateinit var searchView: SearchView
 
     override fun onCreateView(
@@ -37,9 +39,8 @@ class ProteinListFragment :
         initToolbar()
         initList()
         binding?.toolbar?.setNavigationOnClickListener {
-            viewModel?.onBackPressed()
+            viewModel.onBackPressed()
         }
-        viewModel?.onViewCreated()
     }
 
     private fun initToolbar() {
@@ -55,12 +56,16 @@ class ProteinListFragment :
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.protein_list_menu, menu)
+        initSearchView(menu)
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun initSearchView(menu: Menu) {
         val item: MenuItem = menu.findItem(R.id.app_bar_search)
         searchView = item.actionView as SearchView
         searchView.setBackgroundResource(R.drawable.search_back)
         searchView.queryHint = getString(R.string.hint_search_ligand)
         initOnChangeSearchTextListener()
-        return super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun initOnChangeSearchTextListener() {
@@ -68,7 +73,7 @@ class ProteinListFragment :
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(enteredText: String?): Boolean {
                     if (enteredText != null) {
-                        viewModel?.onSearchTextChanged(enteredText)
+                        viewModel.onSearchTextChanged(enteredText)
                     }
                     return false
                 }
@@ -81,9 +86,7 @@ class ProteinListFragment :
     }
 
     private fun initList() {
-        adapter = LigandListAdapter { name ->
-            viewModel?.onProteinClick(name)
-        }
+        adapter = LigandListAdapter(viewModel::onProteinClick)
         binding?.rvLigands?.adapter = adapter
     }
 
@@ -103,11 +106,6 @@ class ProteinListFragment :
 
     private fun getFirstVisibleItem() {
         (binding?.rvLigands?.layoutManager as LinearLayoutManager?)
-            ?.findFirstVisibleItemPosition()?.let { position ->
-                viewModel?.onGetFirstItemPosition(position)
-            }
+            ?.findFirstVisibleItemPosition()?.let(viewModel::onGetFirstItemPosition)
     }
-
-    override fun getViewModelClass() =
-        ProteinListViewModel::class.java
 }

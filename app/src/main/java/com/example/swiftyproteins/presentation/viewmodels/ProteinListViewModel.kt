@@ -21,7 +21,7 @@ class ProteinListViewModel(private val interactor: ProteinInteractor) :
         }
     }
 
-    fun onViewCreated() {
+    init {
         getLigands()
     }
 

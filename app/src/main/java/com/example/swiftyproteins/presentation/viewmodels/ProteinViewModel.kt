@@ -21,11 +21,11 @@ import eu.bolt.screenshotty.ScreenshotBitmap
 import java.lang.IllegalStateException
 
 class ProteinViewModel(
+    private val proteinName: String?,
     private val interactor: ProteinInteractor,
     private val mapper: ProteinMapper
 ) : BaseScreenStateViewModel<FromProtein, Protein>(Protein()) {
 
-    private var proteinName: String? = null
     private var sceneBitmap: Bitmap? = null
     var modelAtomInfo: MutableLiveData<ModelAtomInfo> = SingleEvent()
 
@@ -34,10 +34,19 @@ class ProteinViewModel(
         handleModel()
     }
 
-    fun onViewCreated(proteinName: String) {
-        this.proteinName = proteinName
-        getProteins(proteinName)
+    init {
+       init()
     }
+
+    private fun init() {
+        proteinName?.let { name ->
+            getProteins(name)
+        } ?: logE("missing protein name", IllegalStateException())
+    }
+//    fun onViewCreated(proteinName: String) {
+//        this.proteinName = proteinName
+//        getProteins(proteinName)
+//    }
 
     private fun getProteins(proteinName: String, isHyAtomsVisible: Boolean = false) {
         handleState(State.Loading)
@@ -107,11 +116,8 @@ class ProteinViewModel(
     fun onNetworkErrorDialogCancelable() =
         onBackClick()
 
-    fun onNetworkErrorDialogRetryClick() {
-        proteinName?.let { name ->
-            getProteins(name)
-        } ?: logE("missing protein name", IllegalStateException())
-    }
+    fun onNetworkErrorDialogRetryClick() =
+        init()
 
     fun onNodeTouch(node: Node) {
         node.name?.let { name ->
