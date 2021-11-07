@@ -5,13 +5,25 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btnAuth"
+        android:id="@+id/btnFreeAuth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/auth"
+        android:textAppearance="@style/TextView.Normal.Small.Primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4" />
+
+    <Button
+        android:id="@+id/btnFingerAuth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/fingerprint_login"
+        android:textAppearance="@style/TextView.Normal.Small.Primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnFreeAuth" />
 </androidx.constraintlayout.widget.ConstraintLayout>

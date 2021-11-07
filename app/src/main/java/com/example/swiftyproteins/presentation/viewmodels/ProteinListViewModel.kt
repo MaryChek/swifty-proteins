@@ -44,6 +44,10 @@ class ProteinListViewModel(private val interactor: ProteinInteractor) :
         updateModel(scrollPosition = position, shouldUpdateScreen = false)
 
     fun onBackPressed() {
+        handleAction(FromProteinList.Exit)
+    }
 
+    fun onViewPause() {
+        handleAction(FromProteinList.BackTo.Login)
     }
 }

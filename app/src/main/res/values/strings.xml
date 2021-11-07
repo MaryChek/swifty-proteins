@@ -16,4 +16,7 @@
     <string name="degree_celsius">%1$s ℃</string>
     <string name="auth_error_message">Auth error, please try again</string>
     <string name="auth">login</string>
+    <string name="warning">Warning</string>
+    <string name="message_setup_pass_lock">"Setup password to lock screen. To proceed with fingerprint authentication, you need to set up unlock protection."</string>
+    <string name="fingerprint_login">Login by fingerprint</string>
 </resources>

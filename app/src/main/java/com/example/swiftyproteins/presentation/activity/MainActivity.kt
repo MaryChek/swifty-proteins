@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         navigator.let {
+            router.newRootScreen(Screens.Login)
             navigatorHolder.removeNavigator()
         }
         super.onPause()

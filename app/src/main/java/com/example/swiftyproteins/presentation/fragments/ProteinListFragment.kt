@@ -10,6 +10,7 @@ import com.example.swiftyproteins.presentation.activity.MainActivity
 import com.example.swiftyproteins.presentation.adapters.LigandListAdapter
 import com.example.swiftyproteins.presentation.fragments.base.BaseScreenStateFragment
 import com.example.swiftyproteins.presentation.hideKeyboard
+import com.example.swiftyproteins.presentation.logD
 import com.example.swiftyproteins.presentation.models.ProteinListStateScreen
 import com.example.swiftyproteins.presentation.navigation.FromProteinList
 import com.example.swiftyproteins.presentation.navigation.Screens
@@ -101,6 +102,10 @@ class ProteinListFragment :
                 router.navigateTo(Screens.Protein(action.proteinName))
             is FromProteinList.Command.GetFirstVisibleItem ->
                 getFirstVisibleItem()
+            is FromProteinList.Exit ->
+                router.exit()
+            is FromProteinList.BackTo.Login ->
+                router.newRootScreen(Screens.Login)
         }
     }
 
@@ -108,4 +113,9 @@ class ProteinListFragment :
         (binding?.rvLigands?.layoutManager as LinearLayoutManager?)
             ?.findFirstVisibleItemPosition()?.let(viewModel::onGetFirstItemPosition)
     }
+
+//    override fun onPause() {
+//        viewModel.onViewPause()
+//        super.onPause()
+//    }
 }

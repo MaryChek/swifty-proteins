@@ -43,10 +43,6 @@ class ProteinViewModel(
             getProteins(name)
         } ?: logE("missing protein name", IllegalStateException())
     }
-//    fun onViewCreated(proteinName: String) {
-//        this.proteinName = proteinName
-//        getProteins(proteinName)
-//    }
 
     private fun getProteins(proteinName: String, isHyAtomsVisible: Boolean = false) {
         handleState(State.Loading)
@@ -135,4 +131,7 @@ class ProteinViewModel(
 
     fun onBackClick() =
         handleAction(FromProtein.Navigate.Back)
+
+    fun onViewPause() =
+        handleAction(FromProtein.BackTo.Login)
 }

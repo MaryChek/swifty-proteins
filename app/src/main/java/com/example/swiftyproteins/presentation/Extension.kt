@@ -15,6 +15,16 @@ import androidx.fragment.app.Fragment
 import com.example.swiftyproteins.domain.models.Atom
 import com.google.ar.sceneform.math.Vector3
 import java.lang.Exception
+import android.os.Binder
+import android.app.KeyguardManager
+import android.app.admin.DevicePolicyManager
+import android.content.Context.KEYGUARD_SERVICE
+import android.content.Intent
+import android.os.UserHandle
+import android.view.View
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.core.view.isVisible
 
 fun Fragment.getColor(@ColorRes colorResId: Int): Int =
     requireContext().getColor(colorResId)
@@ -40,6 +50,14 @@ fun Fragment.getBitmapFromView(view: SurfaceView, onSuccess: (Bitmap) -> Unit) {
     }
 }
 
+fun Fragment.isDeviceLocked(): Boolean =
+    (requireActivity().getSystemService(KEYGUARD_SERVICE) as KeyguardManager).isDeviceSecure
+
+fun Fragment.setupPassLock() {
+    val intent = Intent(DevicePolicyManager.ACTION_SET_NEW_PASSWORD)
+    startActivity(intent)
+}
+
 fun Bitmap.overlayToCenter(overlayBitmap: Bitmap): Bitmap {
     val bitmap1Width = width
     val bitmap1Height = height
@@ -62,6 +80,10 @@ fun Bitmap.overlayToCenter(overlayBitmap: Bitmap): Bitmap {
     canvas.drawBitmap(this, Matrix(), null)
     canvas.drawBitmap(overlayBitmap, marginLeft, marginTop, null)
     return finalBitmap
+}
+
+fun View.hide() {
+    isVisible = false
 }
 
 fun Any.logE(message: String?, e: Exception? = null) {

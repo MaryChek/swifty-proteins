@@ -10,6 +10,14 @@ sealed class FromLogin: Action {
     sealed class Command: FromLogin() {
         object ShowBiometricAuthDialog : Command()
 
+        object ShowDialogForSetPassLock : Command()
+
+        object SetupPassLock : Command()
+
+        object HideFingerprintButton : Command()
+
         class ShowAuthErrorDialog(val error: ProteinError.AuthError): Command()
+
+        class ShowToast(val message: String) : Command()
     }
 }

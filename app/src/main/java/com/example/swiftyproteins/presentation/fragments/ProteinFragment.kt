@@ -20,6 +20,8 @@ import com.example.swiftyproteins.presentation.models.ModelAtomInfo
 import android.net.Uri
 import android.view.*
 import com.example.swiftyproteins.presentation.*
+import com.example.swiftyproteins.presentation.navigation.FromProteinList
+import com.example.swiftyproteins.presentation.navigation.Screens
 import eu.bolt.screenshotty.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -131,6 +133,8 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
         when (action) {
             is FromProtein.Navigate.Back ->
                 router.exit()
+            is FromProtein.BackTo.Login ->
+                router.backTo(Screens.Login)
             is FromProtein.Command.ShowNotFoundErrorDialog ->
                 showNotFoundDialog(action.error)
             is FromProtein.Command.ShowNetworkErrorDialog ->
@@ -209,6 +213,7 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
     override fun onPause() {
         super.onPause()
         sceneRender?.onPause()
+//        viewModel.onViewPause()
     }
 
     override fun onResume() {

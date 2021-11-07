@@ -27,4 +27,8 @@ sealed class FromProtein : Action {
 
         object ClearScene: Command()
     }
+
+    sealed class BackTo: FromProtein() {
+        object Login: BackTo()
+    }
 }
