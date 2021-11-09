@@ -64,7 +64,7 @@ dependencies {
     implementation 'eu.bolt:screenshotty:1.0.4'
 
     //Biometric
-    implementation(group: 'com.an.biometric', name: 'biometric-auth', version: '0.1.0', ext: 'aar', classifier: '')
+    implementation "com.an.biometric:biometric-auth:0.1.0@aar"
 
     //Test
     testImplementation 'junit:junit:4.+'
