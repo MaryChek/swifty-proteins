@@ -27,7 +27,7 @@ class SceneRender {
             scaleFactor *= detector.scaleFactor
             scaleFactor =
                 when {
-                    scaleFactor < 1 -> 1F
+                    scaleFactor < 0.1f -> 0.1f
                     scaleFactor >= 5f -> 5f
                     else -> scaleFactor
                 }
@@ -56,7 +56,7 @@ class SceneRender {
     }
 
     fun setCameraPosition(position: Vector3) {
-        sceneView?.scene?.camera?.worldPosition = position
+//        sceneView?.scene?.camera?.worldPosition = position
     }
 
     fun setBackground(color: Int): SceneRender {

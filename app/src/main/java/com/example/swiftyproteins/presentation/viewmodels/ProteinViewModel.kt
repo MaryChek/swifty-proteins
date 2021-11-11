@@ -7,10 +7,7 @@ import com.example.swiftyproteins.data.model.ErrorType
 import com.example.swiftyproteins.domain.interactor.ProteinInteractor
 import com.example.swiftyproteins.presentation.logE
 import com.example.swiftyproteins.presentation.mapper.ProteinMapper
-import com.example.swiftyproteins.presentation.models.ModelAtomInfo
-import com.example.swiftyproteins.presentation.models.Protein
-import com.example.swiftyproteins.presentation.models.ProteinError
-import com.example.swiftyproteins.presentation.models.State
+import com.example.swiftyproteins.presentation.models.*
 import com.example.swiftyproteins.presentation.navigation.FromProtein
 import com.example.swiftyproteins.presentation.overlayToCenter
 import com.example.swiftyproteins.presentation.view.controller.SingleEvent
@@ -48,7 +45,7 @@ class ProteinViewModel(
         handleState(State.Loading)
         interactor.getProteinByName(proteinName,
             onSuccess = { ligand ->
-                val atoms = mapper.map(ligand, isHyAtomsVisible)
+                val atoms: Protein = mapper.map(ligand, isHyAtomsVisible)
                 handleState(State.Success)
                 updateModel(atoms)
             },

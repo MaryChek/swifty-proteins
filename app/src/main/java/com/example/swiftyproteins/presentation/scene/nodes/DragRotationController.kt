@@ -16,6 +16,9 @@ class DragRotationController(
     gestureRecognizer: DragGestureRecognizer
 ) : BaseTransformationController<DragGesture>(transformableNode, gestureRecognizer) {
 
+    var currentPos = Vector3()
+    var currentRot = Quaternion()
+
     // Rate that the node rotates in degrees per degree of twisting.
     private var rotationRateDegrees = 0.5f
 
@@ -58,8 +61,12 @@ class DragRotationController(
         val pos = Vector3(getX(lat, long), getY(lat, long), getZ(lat, long))
         rot = Quaternion.multiply(rot, Quaternion(Vector3.up(), (long).toFloat()))
         rot = Quaternion.multiply(rot, Quaternion(Vector3.right(), (-lat).toFloat()))
-        camera?.localRotation = rot
-        camera?.localPosition = pos
+        camera?.apply {
+            localRotation = rot
+            localPosition = pos
+            currentPos = pos
+            currentRot = rot
+        }
     }
 
     public override fun onEndTransformation(gesture: DragGesture) {}
