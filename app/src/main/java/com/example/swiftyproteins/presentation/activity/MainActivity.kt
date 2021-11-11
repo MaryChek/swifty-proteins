@@ -1,5 +1,7 @@
 package com.example.swiftyproteins.presentation.activity
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -26,11 +28,17 @@ class MainActivity : AppCompatActivity() {
         get() = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as? BaseFragment<*, *>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        disableRotationForPhone()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.tvLoading.isVisible = true
         binding.root.postDelayed({ createRootFragment() }, 1000)
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    private fun disableRotationForPhone() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     override fun onResumeFragments() {
