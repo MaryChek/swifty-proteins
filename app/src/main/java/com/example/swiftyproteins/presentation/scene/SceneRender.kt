@@ -25,6 +25,7 @@ class SceneRender {
     private val onScaleGestureListener = object : OnScaleGestureListener {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             scaleFactor *= detector.scaleFactor
+            logD("scale = ${detector.scaleFactor}, our scale = $scaleFactor")
             scaleFactor =
                 when {
                     scaleFactor < MIN_CAMERA_SCALE -> MIN_CAMERA_SCALE
@@ -223,7 +224,7 @@ class SceneRender {
         private val DEFAULT_CAMERA_POSITION = Vector3(0f, 0f, 20f)
         private const val FAR_CLIP_PLANE = 50f
 
-        private const val MIN_CAMERA_SCALE = .1F
+        private const val MIN_CAMERA_SCALE = 1.0F
         private const val MAX_CAMERA_SCALE = 5.0F
 
     }
