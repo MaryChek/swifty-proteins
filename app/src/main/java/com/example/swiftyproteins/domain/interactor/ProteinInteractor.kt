@@ -9,7 +9,7 @@ import com.example.swiftyproteins.domain.mapper.ProteinMapper
 import com.example.swiftyproteins.domain.models.Atom
 import com.google.gson.Gson
 
-//4fw, 15p, b12, dw2, lz0, pc1, pve, rmd // not open hec // unl, unx - file not found 404
+//not open hec // unl, unx - file not found 404
 class ProteinInteractor(
     private val repository: ProteinsRepository,
     private val fileInteractor: FileInteractor,

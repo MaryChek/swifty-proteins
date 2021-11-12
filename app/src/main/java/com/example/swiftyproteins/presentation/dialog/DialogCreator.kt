@@ -85,11 +85,10 @@ class DialogCreator {
             .setPositiveButtonTitle(positiveButtonTitleResId)
             .setFunctionOnPositive(onContinueClick)
             .setFunctionOnNegative(onCancelClick)
-            .showDialog(context)
-
         if (onCancelClick != null) {
             dialog.setNegativeButtonTitle(R.string.cancel)
         }
+        dialog.showDialog(context)
         return dialog
     }
 }

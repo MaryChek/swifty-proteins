@@ -75,6 +75,10 @@ class LoginFragment : BaseFragment<FromLogin, LoginViewModel>() {
                 viewModel.onAuthError(errorCode)
             }
         }
+        initBiometricManager(biometricCallback)
+    }
+
+    private fun initBiometricManager(biometricCallback: LoginBiometricCallback) =
         try {
             BiometricManager.BiometricBuilder(activity)
                 .setTitle("Sing in")
@@ -86,7 +90,6 @@ class LoginFragment : BaseFragment<FromLogin, LoginViewModel>() {
         } catch (e: Exception) {
             viewModel.onInitBiometricFail()
         }
-    }
 
     private fun showSetLockPassDialog() {
         DialogCreator().showSetLockPassDialog(

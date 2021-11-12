@@ -99,17 +99,22 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
     }
 
     private fun initScene() {
+        sceneRender = SceneRender()
+        initSceneRender()
+    }
+
+    private fun initSceneRender() {
         binding?.sceneView?.let { sceneView ->
-            sceneRender = SceneRender()
-                .initSceneView(sceneView)
-                .setBackground(getColor(R.color.color_background_scene))
-                .setOnNodeTouchListener(requireContext(), viewModel::onNodeTouch)
-                .setDisplayMetrics(resources.displayMetrics)
+            sceneRender
+                ?.initSceneView(sceneView)
+                ?.setBackground(getColor(R.color.color_background_scene))
+                ?.setOnNodeTouchListener(requireContext(), viewModel::onNodeTouch)
+                ?.setDisplayMetrics(resources.displayMetrics)
         }
     }
 
     override fun handleModel(model: Protein) {
-        initScene()
+        initSceneRender()
         model.atoms.forEach { atom ->
             sceneRender?.setSphere(
                 requireContext(),

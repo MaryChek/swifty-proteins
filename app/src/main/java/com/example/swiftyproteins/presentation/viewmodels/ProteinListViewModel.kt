@@ -46,8 +46,4 @@ class ProteinListViewModel(private val interactor: ProteinInteractor) :
     fun onBackPressed() {
         handleAction(FromProteinList.Exit)
     }
-
-    fun onViewPause() {
-        handleAction(FromProteinList.BackTo.Login)
-    }
 }

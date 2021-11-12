@@ -104,3 +104,4 @@ fun String.splitOnlyWords(): List<String> =
     split(" ").filter { string ->
         string != ""
     }
+//4fw, 15p, b12, dw2, lz0, pc1, pve, rmd
