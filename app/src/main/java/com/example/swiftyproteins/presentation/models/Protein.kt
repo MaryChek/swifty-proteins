@@ -9,11 +9,11 @@ class Protein(
     val atoms: List<Atom> = emptyList(),
     val atomConnections: List<AtomConnection> = emptyList()
 ) {
-    val cameraPosition: Vector3
+//    val cameraPosition: Vector3
 
-    init {
-        cameraPosition = getPositionCamera()
-    }
+//    init {
+//        cameraPosition = getPositionCamera()
+//    }
 
     private fun getPositionCamera(): Vector3 {
         if (atoms.isNotEmpty()) {

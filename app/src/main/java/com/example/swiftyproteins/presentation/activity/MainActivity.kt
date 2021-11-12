@@ -32,8 +32,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.tvLoading.isVisible = true
-        binding.root.postDelayed({ createRootFragment() }, 1000)
+        if (savedInstanceState == null) {
+            binding.tvLoading.isVisible = true
+        }
+        binding.root.postDelayed({ createRootFragment() }, 10000)
     }
 
     @SuppressLint("SourceLockedOrientationActivity")

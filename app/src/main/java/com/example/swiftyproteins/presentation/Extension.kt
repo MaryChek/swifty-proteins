@@ -4,8 +4,6 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.PixelCopy
 import android.view.SurfaceView
@@ -15,12 +13,11 @@ import androidx.fragment.app.Fragment
 import com.example.swiftyproteins.domain.models.Atom
 import com.google.ar.sceneform.math.Vector3
 import java.lang.Exception
-import android.os.Binder
 import android.app.KeyguardManager
 import android.app.admin.DevicePolicyManager
 import android.content.Context.KEYGUARD_SERVICE
 import android.content.Intent
-import android.os.UserHandle
+import android.os.*
 import android.view.View
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
@@ -51,7 +48,11 @@ fun Fragment.getBitmapFromView(view: SurfaceView, onSuccess: (Bitmap) -> Unit) {
 }
 
 fun Fragment.isDeviceLocked(): Boolean =
-    (requireActivity().getSystemService(KEYGUARD_SERVICE) as KeyguardManager).isDeviceSecure
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        (requireActivity().getSystemService(KEYGUARD_SERVICE) as KeyguardManager).isDeviceSecure
+    } else {
+        true
+    }
 
 fun Fragment.setupPassLock() {
     val intent = Intent(DevicePolicyManager.ACTION_SET_NEW_PASSWORD)

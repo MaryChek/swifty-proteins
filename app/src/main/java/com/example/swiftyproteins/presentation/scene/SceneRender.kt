@@ -27,8 +27,8 @@ class SceneRender {
             scaleFactor *= detector.scaleFactor
             scaleFactor =
                 when {
-                    scaleFactor < 0.1f -> 0.1f
-                    scaleFactor >= 5f -> 5f
+                    scaleFactor < MIN_CAMERA_SCALE -> MIN_CAMERA_SCALE
+                    scaleFactor >= MAX_CAMERA_SCALE -> MAX_CAMERA_SCALE
                     else -> scaleFactor
                 }
 
@@ -222,5 +222,9 @@ class SceneRender {
 
         private val DEFAULT_CAMERA_POSITION = Vector3(0f, 0f, 20f)
         private const val FAR_CLIP_PLANE = 50f
+
+        private const val MIN_CAMERA_SCALE = .1F
+        private const val MAX_CAMERA_SCALE = 5.0F
+
     }
 }

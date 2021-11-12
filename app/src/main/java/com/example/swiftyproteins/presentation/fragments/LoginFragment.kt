@@ -75,13 +75,17 @@ class LoginFragment : BaseFragment<FromLogin, LoginViewModel>() {
                 viewModel.onAuthError(errorCode)
             }
         }
-        BiometricManager.BiometricBuilder(activity)
-            .setTitle("Sing in")
-            .setSubtitle("")
-            .setDescription("")
-            .setNegativeButtonText("Cancel")
-            .build()
-            .authenticate(biometricCallback)
+        try {
+            BiometricManager.BiometricBuilder(activity)
+                .setTitle("Sing in")
+                .setSubtitle("")
+                .setDescription("")
+                .setNegativeButtonText("Cancel")
+                .build()
+                .authenticate(biometricCallback)
+        } catch (e: Exception) {
+            viewModel.onInitBiometricFail()
+        }
     }
 
     private fun showSetLockPassDialog() {
@@ -90,11 +94,7 @@ class LoginFragment : BaseFragment<FromLogin, LoginViewModel>() {
         )
     }
 
-    private fun showAuthErrorDialog(error: ProteinError.AuthError) {
-        DialogCreator().showAuthErrorDialog(
-            requireContext(),
-            error,
-            viewModel::onAuthErrorDialogRetryClick
-        )
+    private fun showAuthErrorDialog(error: ProteinError) {
+        DialogCreator().showAuthErrorDialog(requireContext(), error)
     }
 }

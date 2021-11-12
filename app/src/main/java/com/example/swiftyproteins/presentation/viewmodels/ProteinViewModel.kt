@@ -128,7 +128,4 @@ class ProteinViewModel(
 
     fun onBackClick() =
         handleAction(FromProtein.Navigate.Back)
-
-    fun onViewPause() =
-        handleAction(FromProtein.BackTo.Login)
 }

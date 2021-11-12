@@ -1,6 +1,5 @@
 package com.example.swiftyproteins.presentation.scene.nodes
 
-import com.google.ar.sceneform.ux.ScaleController
 import com.google.ar.sceneform.ux.TransformableNode
 import com.google.ar.sceneform.ux.TransformationSystem
 

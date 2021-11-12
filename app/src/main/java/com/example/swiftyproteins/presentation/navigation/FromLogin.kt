@@ -16,7 +16,7 @@ sealed class FromLogin: Action {
 
         object HideFingerprintButton : Command()
 
-        class ShowAuthErrorDialog(val error: ProteinError.AuthError): Command()
+        class ShowAuthErrorDialog(val error: ProteinError): Command()
 
         class ShowToast(val message: String) : Command()
     }

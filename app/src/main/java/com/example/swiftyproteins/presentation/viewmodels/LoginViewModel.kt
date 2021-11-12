@@ -1,6 +1,7 @@
 package com.example.swiftyproteins.presentation.viewmodels
 
 import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
 import androidx.lifecycle.viewModelScope
 import com.example.swiftyproteins.presentation.models.ProteinError
 import com.example.swiftyproteins.presentation.navigation.FromLogin
@@ -21,7 +22,11 @@ class LoginViewModel : BaseViewModel<FromLogin>() {
     }
 
     fun onFreeAuthClick() {
-        handleAction(FromLogin.Navigate.ProteinList)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            handleAction(FromLogin.Navigate.ProteinList)
+        } else {
+            handleAction(FromLogin.Command.ShowToast("Unfortunately this application is not supported on this device"))
+        }
     }
 
     private fun auth() {
@@ -40,34 +45,34 @@ class LoginViewModel : BaseViewModel<FromLogin>() {
             BiometricPrompt.BIOMETRIC_ERROR_LOCKOUT -> {
                 isLoginEnable = false
                 viewModelScope.launch(Dispatchers.Main) {
-                    delay(MS_IN_MINUTE)
+                    delay(MS_IN_HALF_A_MINUTE)
                     isLoginEnable = true
                 }
+                handleAction(FromLogin.Command.ShowAuthErrorDialog(ProteinError.AuthWarning))
             }
-            BiometricPrompt.BIOMETRIC_ERROR_LOCKOUT_PERMANENT -> {
-                handleAction(FromLogin.Command.ShowToast("Too many attempts, scanner disable"))
-                viewModelScope.launch(Dispatchers.Main) {
-                    delay(10000)
-                    handleAction(FromLogin.Navigate.ProteinList)
-                }
-            }
+            BiometricPrompt.BIOMETRIC_ERROR_LOCKOUT_PERMANENT ->
+                handleAction(FromLogin.Command.ShowAuthErrorDialog(ProteinError.AuthError))
             BiometricPrompt.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-                handleAction(FromLogin.Command.ShowToast("Fingerprint authentication on this device is unfortunately not available"))
-                handleAction(FromLogin.Command.HideFingerprintButton)
+                onInitBiometricFail()
             }
             else ->
-                handleAction(FromLogin.Command.ShowAuthErrorDialog(ProteinError.AuthError))
+                handleAction(FromLogin.Command.ShowAuthErrorDialog(ProteinError.UnknownError))
         }
     }
-
-    fun onAuthErrorDialogRetryClick() =
-        auth()
 
     fun onSetupPassLockPositiveClick() {
         handleAction(FromLogin.Command.SetupPassLock)
     }
 
+    fun onInitBiometricFail() {
+        handleAction(FromLogin.Command.ShowToast("Fingerprint authentication on this device is unfortunately not available"))
+        viewModelScope.launch {
+            delay(1000)
+            handleAction(FromLogin.Command.HideFingerprintButton)
+        }
+    }
+
     companion object {
-        private const val MS_IN_MINUTE = 30000L
+        private const val MS_IN_HALF_A_MINUTE = 30000L
     }
 }

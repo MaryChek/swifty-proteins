@@ -110,7 +110,6 @@ class ProteinFragment : BaseScreenStateFragment<FromProtein, Protein, ProteinVie
 
     override fun handleModel(model: Protein) {
         initScene()
-        sceneRender?.setCameraPosition(model.cameraPosition)
         model.atoms.forEach { atom ->
             sceneRender?.setSphere(
                 requireContext(),

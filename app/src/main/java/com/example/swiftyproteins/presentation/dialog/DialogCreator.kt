@@ -22,7 +22,7 @@ class DialogCreator {
     fun showSetLockPassDialog(
         context: Context,
         onPositiveClick: () -> Unit
-    ) : CommonDialog =
+    ): CommonDialog =
         showCancelableAndContinueDialog(
             context = context,
             title = context.getString(R.string.warning),
@@ -33,10 +33,14 @@ class DialogCreator {
 
     fun showAuthErrorDialog(
         context: Context,
-        error: ProteinError.AuthError,
-        onRetryClick: () -> Unit
+        error: ProteinError,
     ): CommonDialog =
-        showErrorCancelableAndContinueDialog(context, error,  null, onRetryClick)
+        showErrorCancelableAndContinueDialog(
+            context = context,
+            error = error,
+            positiveButtonTitleResId = R.string.ok,
+            onRetryClick = {}
+        )
 
     fun showNetworkErrorDialog(
         context: Context,
@@ -44,19 +48,25 @@ class DialogCreator {
         onCancelClick: () -> Unit,
         onRetryClick: () -> Unit
     ): CommonDialog =
-        showErrorCancelableAndContinueDialog(context, error, onCancelClick, onRetryClick)
+        showErrorCancelableAndContinueDialog(
+            context = context,
+            error = error,
+            onCancelClick = onCancelClick,
+            onRetryClick = onRetryClick
+        )
 
     private fun showErrorCancelableAndContinueDialog(
         context: Context,
         error: ProteinError,
-        onCancelClick: (() -> Unit)?,
+        @StringRes positiveButtonTitleResId: Int = R.string.retry,
+        onCancelClick: (() -> Unit)? = null,
         onRetryClick: () -> Unit
-    ) : CommonDialog =
+    ): CommonDialog =
         showCancelableAndContinueDialog(
             context = context,
             title = context.getString(error.getTitleResId()),
             messageResId = error.getErrorMessageResId(),
-            positiveButtonTitleResId = R.string.retry,
+            positiveButtonTitleResId = positiveButtonTitleResId,
             onCancelClick = onCancelClick,
             onContinueClick = onRetryClick
         )
@@ -68,13 +78,18 @@ class DialogCreator {
         @StringRes positiveButtonTitleResId: Int = R.string.__arcore_continue,
         onCancelClick: (() -> Unit)?,
         onContinueClick: () -> Unit
-    ): CommonDialog =
-        CommonDialog()
+    ): CommonDialog {
+       val dialog = CommonDialog()
             .setTitle(title)
             .setMessage(messageResId)
-            .setNegativeButtonTitle(R.string.cancel)
             .setPositiveButtonTitle(positiveButtonTitleResId)
             .setFunctionOnPositive(onContinueClick)
             .setFunctionOnNegative(onCancelClick)
             .showDialog(context)
+
+        if (onCancelClick != null) {
+            dialog.setNegativeButtonTitle(R.string.cancel)
+        }
+        return dialog
+    }
 }
